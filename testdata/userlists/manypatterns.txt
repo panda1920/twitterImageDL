@@ -1,0 +1,7 @@
+nonewline_
+    noleadingspaces
+notrailingspaces    
+@noleadingatmark
+inv@lidUsername1
+invalidUsername#2
+invalid+user+name+3
