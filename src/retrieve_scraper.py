@@ -7,7 +7,6 @@ from bs4 import BeautifulSoup
 
 class TweetsRetrieve_ScraperAPI:
     SCRAPERAPI_KEY = os.environ['SCRAPERAPI_KEY']
-    TEST_HTML = os.path.join( os.path.dirname(os.path.abspath(__file__)), '..\\testdata\\twitterpage2.html' )
     def __init__(self):
         pass
 

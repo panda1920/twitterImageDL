@@ -1,7 +1,6 @@
 from pathlib import Path
 import shutil
 import sys
-import os.path
 
 import pytest
     
@@ -10,8 +9,6 @@ SRC_DIR = PROJECT_DIR / 'src'
 TEST_DL_LOCATION = PROJECT_DIR / 'testdata' / 'download'
 
 sys.path.append(str( SRC_DIR ))
-
-import exceptions
 from twitterimagedl import dlimage
 
 @pytest.fixture(scope='function')
