@@ -5,10 +5,11 @@ from download import downloadImages
 
 def dlimage():
     settings = parseArgument()
+    tweetsRetrieve = TweetsRetrieve_ScraperAPI()
     users = readUserList(settings['usersListPath'])
     
     for user in users:
-        tweets = TweetsRetrieve_ScraperAPI().getTweetsInfo(user)
+        tweets = tweetsRetrieve.getTweetsInfo(user)
         images = getImagesList(tweets)
 
         downloadImages(

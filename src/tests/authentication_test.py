@@ -10,7 +10,7 @@ SRC_DIR = PROJECT_DIR / 'src'
 
 sys.path.append(str( SRC_DIR ))
 
-from twitterAPIAuthentication import createOAuth1HeadereString, createSignature, createSignatureBaseString, createAuthInfo
+from twitterAPIAuthentication import createOAuth1HeaderString, createSignature, createSignatureBaseString, createAuthInfo
 
 @pytest.fixture(scope='function')
 def setupTestEnviron():
@@ -55,7 +55,7 @@ class TestOauth1:
         assert signature == referenceSignature
 
     def test_createOauth1HeaderString(self, setupTestEnviron):
-        headerString = createOAuth1HeadereString(
+        headerString = createOAuth1HeaderString(
             self.testURLEndpoint,
             self.testHTTPMethod,
             self.testQueryString,

@@ -19,7 +19,7 @@ def createAuthInfo():
         'oauth_version': '1.0',
     }
 
-def createOAuth1HeadereString(endpointUrl, method, queryString, body, authInfo):
+def createOAuth1HeaderString(endpointUrl, method, queryString, body, authInfo):
     authInfo['oauth_signature'] = createSignature(endpointUrl, method, queryString, body, authInfo)
 
     headerString = 'OAuth '
