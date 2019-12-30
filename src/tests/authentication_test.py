@@ -2,7 +2,6 @@ from pathlib import Path
 import shutil
 import sys
 import os
-
 import pytest
     
 PROJECT_DIR = Path(__file__).resolve().parents[2]
@@ -14,10 +13,17 @@ from twitterAPIAuthentication import createOAuth1HeaderString, createSignature, 
 
 @pytest.fixture(scope='function')
 def setupTestEnviron():
-    os.environ['CONSUMER_KEY'] = 'xvz1evFS4wEEPTGEFPHBog'
-    os.environ['CONSUMER_SECRET'] = 'kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw'
-    os.environ['ACCESS_TOKEN'] = '370773112-GmHxMAgYyLbNEtIKZeRNFsMKPR9EyMZeS9weJAEb'
-    os.environ['ACCESS_SECRET'] = 'LswwdoUaIvS8ltyTt5jkRh4J50vUPVVHtR2YPi5kE'
+    oldEnv = os.environ
+    os.environ = {
+        'CONSUMER_KEY': 'xvz1evFS4wEEPTGEFPHBog',
+        'CONSUMER_SECRET': 'kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw',
+        'ACCESS_TOKEN': '370773112-GmHxMAgYyLbNEtIKZeRNFsMKPR9EyMZeS9weJAEb',
+        'ACCESS_SECRET': 'LswwdoUaIvS8ltyTt5jkRh4J50vUPVVHtR2YPi5kE',
+    }
+
+    yield
+
+    os.environ = oldEnv
 
 class TestOauth1:
     testURLEndpoint = 'https://api.twitter.com/1.1/statuses/update.json'

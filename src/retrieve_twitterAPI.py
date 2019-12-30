@@ -1,5 +1,6 @@
 import urllib.request
 import urllib.parse
+from urllib.error import HTTPError
 import json
 import time
 
@@ -17,6 +18,8 @@ class TweetsRetrieve_TwitterAPI:
     }
 
     def getTweetsInfo(self, username):
+        print(f'getting Tweets from {username}...')
+
         allTweets = self.getAllTweetsFromUser(username)
 
         return [
@@ -36,10 +39,10 @@ class TweetsRetrieve_TwitterAPI:
             #     video['media_url'] for video in tweet['extended_entities']['media']
             #     if video['type'] == 'video'
             # ],
-            'gifs': [
-                gifs['video_info']['variants']['url'] for gifs in tweet['extended_entities']['media']
-                if gifs['type'] == 'animated_gif'
-            ]
+            # 'gifs': [
+            #     gifs['video_info']['variants']['url'] for gifs in tweet['extended_entities']['media']
+            #     if gifs['type'] == 'animated_gif'
+            # ],
         }
 
     def convertCreatedAtToEpochTime(self, createdAt):
@@ -67,9 +70,12 @@ class TweetsRetrieve_TwitterAPI:
         url = f'{self.ENDPOINT_URL}?{urllib.parse.urlencode(queryString)}'
         request = urllib.request.Request(url, headers=headers, method=self.METHOD)
 
-        with urllib.request.urlopen(request) as response:
-            tweets = json.loads( response.read() )
-            return tweets
+        try:
+            with urllib.request.urlopen(request) as response:
+                tweets = json.loads( response.read() )
+                return tweets
+        except HTTPError as e:
+            return []
 
     def createQueryString(self, username, maxId):
         queryString = self.DEFAULT_QUERY_STRING.copy()

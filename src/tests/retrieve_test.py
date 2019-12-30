@@ -17,7 +17,7 @@ TEST_USERNAME = 'poopoopanda21'
 @pytest.fixture(scope='function', params=[TweetsRetrieve_TwitterAPI, TweetsRetrieve_ScraperAPI])
 def classToTest(request):
     yield request.param
-    
+
 def test_retrieveTweetsInfo(classToTest):
     tweets = classToTest().getTweetsInfo(TEST_USERNAME)
 
@@ -26,3 +26,8 @@ def test_retrieveTweetsInfo(classToTest):
         images = tweet['images']
         assert len(images) > 0
         assert type(images[0]) is str
+
+def test_authorization():
+    tweets = TweetsRetrieve_TwitterAPI().getTweetsInfo(TEST_USERNAME)
+
+    assert len(tweets) == 3

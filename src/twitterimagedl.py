@@ -1,11 +1,11 @@
 from parseArgument import parseArgument
 from readUserList import readUserList
-from retrieve_scraper import TweetsRetrieve_ScraperAPI
+from retrieve_twitterAPI import TweetsRetrieve_TwitterAPI
 from download import downloadImages
 
 def dlimage():
     settings = parseArgument()
-    tweetsRetrieve = TweetsRetrieve_ScraperAPI()
+    tweetsRetrieve = TweetsRetrieve_TwitterAPI()
     users = readUserList(settings['usersListPath'])
     
     for user in users:
