@@ -29,10 +29,27 @@ def restoreSysArgs():
 def test_dlImageDownloads3Images(cleanupTestDL, restoreSysArgs):
     userListFile = str(PROJECT_DIR / 'testdata' / 'userlists'/ 'me.txt')
     saveLocation = str(TEST_DL_LOCATION)
-    sys.argv = [sys.argv[0], userListFile, saveLocation]
+    nonExistantHistory = str(TEST_DL_LOCATION / 'history.txt')
+    sys.argv = [sys.argv[0], userListFile, saveLocation, nonExistantHistory]
 
     dlimage()
 
     assert Path(saveLocation, 'poopoopanda21', 'EGWZFWPUYAABM6m.jpg').exists()
     assert Path(saveLocation, 'poopoopanda21', 'EGWZDQgU0AAAOgl.jpg').exists()
     assert Path(saveLocation, 'poopoopanda21', 'EGWZAe4UEAAabKm.jpg').exists()
+
+    assert Path(nonExistantHistory).exists()
+
+def test_dlImageDownloads0ImagesWhenHistoryPresent(cleanupTestDL, restoreSysArgs):
+    userListFile = str(PROJECT_DIR / 'testdata' / 'userlists'/ 'me.txt')
+    saveLocation = str(TEST_DL_LOCATION)
+    existingHistory = str(PROJECT_DIR / 'testdata' / 'history' / 'history_poopoopanda21.json')
+    sys.argv = [sys.argv[0], userListFile, saveLocation, existingHistory]
+
+    dlimage()
+
+    assert not Path(saveLocation, 'poopoopanda21', 'EGWZFWPUYAABM6m.jpg').exists()
+    assert not Path(saveLocation, 'poopoopanda21', 'EGWZDQgU0AAAOgl.jpg').exists()
+    assert not Path(saveLocation, 'poopoopanda21', 'EGWZAe4UEAAabKm.jpg').exists()
+
+    assert Path(existingHistory).exists()

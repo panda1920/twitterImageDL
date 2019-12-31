@@ -2,10 +2,12 @@ from parseArgument import parseArgument
 from readUserList import readUserList
 from retrieve_twitterAPI import TweetsRetrieve_TwitterAPI
 from download import downloadImages
+from download_history import DownloadHistory
 
 def dlimage():
     settings = parseArgument()
-    tweetsRetrieve = TweetsRetrieve_TwitterAPI()
+    history = DownloadHistory(settings['historyPath'])
+    tweetsRetrieve = TweetsRetrieve_TwitterAPI(history)
     users = readUserList(settings['usersListPath'])
     
     for user in users:
@@ -17,6 +19,8 @@ def dlimage():
             user,
             settings['saveLocation']
         )
+    
+    history.writeToFile()
 
 def getImagesList(tweets):
     images = []

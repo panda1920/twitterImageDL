@@ -17,6 +17,9 @@ class TweetsRetrieve_TwitterAPI:
         'include_rts': 'false'
     }
 
+    def __init__(self, history):
+        self._history = history
+
     def getTweetsInfo(self, username):
         print(f'getting Tweets from {username}...')
 
@@ -53,19 +56,27 @@ class TweetsRetrieve_TwitterAPI:
 
     def getAllTweetsFromUser(self, username):
         maxId = None # parameter used for pagination in twitter api
+        mostRecentTweetId = self._history.getHistory(username)
         allTweets = []
         
         while True:
-            tweets = self.getTweets(username, maxId)
-            numTweets = len(tweets)
-            if numTweets == 0:
-                return allTweets
+            tweets = self.getTweets(username, maxId, mostRecentTweetId)
+            if len(tweets) == 0:
+                break
 
             maxId = tweets[-1]['id'] - 1
             allTweets += tweets
 
-    def getTweets(self, username, maxId):
-        queryString = self.createQueryString(username, maxId)
+        self.updateHistory(username, allTweets)
+        return allTweets
+
+    def updateHistory(self, username, allTweets):
+        if len(allTweets) > 0:
+            mostRecentTweetId = allTweets[0]['id_str']
+            self._history.updateHistory(username, mostRecentTweetId)
+
+    def getTweets(self, username, maxId, mostRecentTweetId):
+        queryString = self.createQueryString(username, maxId, mostRecentTweetId)
         headers = self.createHeader(queryString)
         url = f'{self.ENDPOINT_URL}?{urllib.parse.urlencode(queryString)}'
         request = urllib.request.Request(url, headers=headers, method=self.METHOD)
@@ -77,11 +88,13 @@ class TweetsRetrieve_TwitterAPI:
         except HTTPError as e:
             return []
 
-    def createQueryString(self, username, maxId):
+    def createQueryString(self, username, maxId, mostRecentTweetId):
         queryString = self.DEFAULT_QUERY_STRING.copy()
         queryString['screen_name'] = username
         if maxId != None:
             queryString['max_id'] = str(maxId)
+        if mostRecentTweetId != None:
+            queryString['since_id'] = mostRecentTweetId
 
         return queryString
 
