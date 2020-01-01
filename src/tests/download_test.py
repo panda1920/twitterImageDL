@@ -13,7 +13,7 @@ TESTIMAGE_LOCATION = PROJECT_DIR / 'testdata' / 'images'
 sys.path.append(str( SRC_DIR ))
 
 import exceptions
-from download import download, createUserDirectory, createUserDirectoryPath, createDownloadFilePath, downloadImages
+from download import download, createDownloadFilePath, downloadMedia
 
 @pytest.fixture(scope='function')
 def cleanupTestDL():
@@ -51,63 +51,30 @@ def test_downloadOnlineNonExistantImage(cleanupTestDL):
     with pytest.raises(exceptions.DownloadErrorException):
         download( str(fileToDL), str(downloadedFile) )
 
-def test_createUserDirectory(cleanupTestDL):
-    username = 'user1'
-    saveLocation = str(TEST_DL_LOCATION)
-    dir_to_create = TEST_DL_LOCATION / username
-
-    createUserDirectory(username, saveLocation)
-    assert dir_to_create.exists()
-
-def test_createUserDirectoryWillDoNothingWhenExistingDir(cleanupTestDL):
-    username = 'user1'
-    saveLocation = str(TEST_DL_LOCATION)
-    dir_to_create = TEST_DL_LOCATION / username
-    samplefile = dir_to_create / 'samplefile.txt'
-
-    # create dir and make files inside
-    createUserDirectory(username, saveLocation)
-    samplefile.touch()
-
-    # create dir again
-    createUserDirectory(username, saveLocation)
-
-    assert samplefile.exists()
-
-def test_createUserDirectoryPath(cleanupTestDL):
-    username = 'user1'
-    saveLocation = str(TEST_DL_LOCATION)
-    dir_to_create = TEST_DL_LOCATION / username
-
-    assert createUserDirectoryPath(username, saveLocation) == dir_to_create
-
 def test_createDownloadFilePath(cleanupTestDL):
-    username = 'user1'
     saveLocation = str(TEST_DL_LOCATION)
     fileToDL = r'https://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2017/11/12234558/Chinook-On-White-03.jpg'
-    filepath = TEST_DL_LOCATION / username / 'Chinook-On-White-03.jpg'
+    filepath = TEST_DL_LOCATION / 'Chinook-On-White-03.jpg'
 
-    assert createDownloadFilePath(fileToDL, username, saveLocation) == str(filepath)
+    assert createDownloadFilePath(fileToDL, saveLocation) == str(filepath)
 
 def test_downloadImagesDownloadsImage(cleanupTestDL):
-    username = 'user1'
     saveLocation = str(TEST_DL_LOCATION)
     fileToDL = r'https://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2017/11/12234558/Chinook-On-White-03.jpg'
-    filepath = TEST_DL_LOCATION / username / 'Chinook-On-White-03.jpg'
+    filepath = TEST_DL_LOCATION / 'Chinook-On-White-03.jpg'
 
-    downloadImages([fileToDL], username, saveLocation)
+    downloadMedia([fileToDL], saveLocation)
     assert filepath.exists()
 
 def test_downloadImagesOfExistingFileDoesNothing(cleanupTestDL):
-    username = 'user1'
     saveLocation = str(TEST_DL_LOCATION)
     fileToDL = str( Path(TESTIMAGE_LOCATION, 'dog1.jpg').as_uri() )
-    filepath = TEST_DL_LOCATION / username / 'dog1.jpg'
+    filepath = TEST_DL_LOCATION  / 'dog1.jpg'
 
-    downloadImages([fileToDL], username, saveLocation)
+    downloadMedia([fileToDL], saveLocation)
 
     modTime1 = os.path.getmtime(filepath)
-    downloadImages([fileToDL], username, saveLocation)
+    downloadMedia([fileToDL], saveLocation)
     modTime2 = os.path.getmtime(filepath)
 
     assert modTime1 == modTime2

@@ -34,22 +34,50 @@ class TweetsRetrieve_TwitterAPI:
         return {
             'text': tweet['text'],
             'timestamp': self.convertCreatedAtToEpochTime(tweet['created_at']),
-            'images': [
-                image['media_url'] for image in tweet['extended_entities']['media']
-                if image['type'] == 'photo'
-            ],
-            # 'videos': [
-            #     video['media_url'] for video in tweet['extended_entities']['media']
-            #     if video['type'] == 'video'
-            # ],
-            # 'gifs': [
-            #     gifs['video_info']['variants']['url'] for gifs in tweet['extended_entities']['media']
-            #     if gifs['type'] == 'animated_gif'
-            # ],
+            'images': self.extractImageURLsFromTweet(tweet),
+            'videos': self.extractVideoURLsFromTweet(tweet),
+            'gifs': self.extractGifURLsFromTweet(tweet),
         }
 
     def convertCreatedAtToEpochTime(self, createdAt):
         return time.mktime(time.strptime(createdAt,"%a %b %d %H:%M:%S +0000 %Y"))
+
+    def extractImageURLsFromTweet(self, tweet):
+        return [
+            image['media_url'] for image in tweet['extended_entities']['media']
+            if image['type'] == 'photo'
+        ]
+    def extractGifURLsFromTweet(self, tweet):
+        return [
+            gif['video_info']['variants'][0]['url'] for gif in tweet['extended_entities']['media']
+            if gif['type'] == 'animated_gif'
+        ]
+        # url in tweet is in mp4 format for some reason...
+        # might have to make some conversion function or calls to other micro service
+
+    def extractVideoURLsFromTweet(self, tweet):
+        # extracts the highest quality video from tweet
+        videoVariants = [
+            video['video_info']['variants'] for video in tweet['extended_entities']['media']
+            if video['type'] == 'video'
+        ]
+
+        videos = []
+        for variant in videoVariants:
+            # there are several version of videos in the tweet;
+            # I must find the one with the best quality
+            bestQualityVideoSofar = { 'bitrate': 0 }
+            for video in variant:
+                if 'bitrate' in video and video['bitrate'] > bestQualityVideoSofar['bitrate']:
+                    bestQualityVideoSofar = video
+            
+            url = bestQualityVideoSofar['url']
+            # sometimes there is a weird ?tag=10 at the end so we remove it
+            indexOfExtension = url.rfind('.mp4') + 4
+            videos.append( url[:indexOfExtension] )
+
+        print(videos)
+        return videos
 
     def tweetHaveMedia(self, tweet):
         return 'extended_entities' in tweet
