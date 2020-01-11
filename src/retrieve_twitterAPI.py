@@ -47,6 +47,7 @@ class TweetsRetrieve_TwitterAPI:
             image['media_url'] for image in tweet['extended_entities']['media']
             if image['type'] == 'photo'
         ]
+        
     def extractGifURLsFromTweet(self, tweet):
         return [
             gif['video_info']['variants'][0]['url'] for gif in tweet['extended_entities']['media']
@@ -76,7 +77,6 @@ class TweetsRetrieve_TwitterAPI:
             indexOfExtension = url.rfind('.mp4') + 4
             videos.append( url[:indexOfExtension] )
 
-        print(videos)
         return videos
 
     def tweetHaveMedia(self, tweet):
@@ -113,7 +113,8 @@ class TweetsRetrieve_TwitterAPI:
             with urllib.request.urlopen(request) as response:
                 tweets = json.loads( response.read() )
                 return tweets
-        except HTTPError as e:
+        except HTTPError:
+            print(f'failed to retrieve tweet from user {username}')
             return []
 
     def createQueryString(self, username, maxId, mostRecentTweetId):

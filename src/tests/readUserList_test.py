@@ -58,3 +58,9 @@ def test_readUserList_ShouldIgnoreInvalidUsernames():
 
     userList = readUserList(filePath)
     assert len(userList) == 4
+
+def test_readerList_ShouldIgnoreDuplicateNames():
+    filePath = TEST_FILES_LOCATION / 'duplicates.txt'
+
+    userList = readUserList(filePath)
+    assert len(userList) == 3

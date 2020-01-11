@@ -13,5 +13,5 @@ pytest = "*"
 python_version = "3.7"
 
 [scripts]
-test = "pytest -rs"
+test = "pytest -ra"
 download = "python ./src/twitterimagedl.py ./testdata/userlists/me.txt ./testdata/download"

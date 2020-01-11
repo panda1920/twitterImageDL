@@ -10,8 +10,11 @@ class TweetsRetrieve_ScraperAPI:
     def __init__(self):
         pass
 
-    def getTweetsInfo(self, username):        
-        return list( map(self.getTweetInfo, self.getTweets(username)) )
+    def getTweetsInfo(self, username):
+        return [
+            self.getTweetInfo(tweet)
+            for tweet in self.getTweets(username)
+        ]
 
     def getTweets(self, username):
         soup = BeautifulSoup( self.getTwitterPage(username), 'html.parser' )

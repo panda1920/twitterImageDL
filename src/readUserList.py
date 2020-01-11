@@ -2,9 +2,12 @@ import exceptions
 import re
 
 def readUserList(file):
-    userList = getList(file)
-    sanitized = list( map(sanitizeUsername, userList) )
-    return filterInvalidUsernames(sanitized)
+    usernames = [
+        sanitizeUsername(username)
+        for username in getList(file)
+    ]
+    usernames = removeDuplicates(usernames)
+    return filterInvalidUsernames(usernames)
 
 def getList(file):
     try:
@@ -19,6 +22,14 @@ def sanitizeUsername(username):
         sanitized = sanitized[1:]
 
     return sanitized
+
+def removeDuplicates(usernames):
+    uniques = []
+    for username in usernames:
+        if username not in uniques:
+            uniques.append(username)
+
+    return uniques
 
 def filterInvalidUsernames(usernames):
     return [username for username in usernames if re.match(r'^[A-Za-z0-9_]+$', username)]
