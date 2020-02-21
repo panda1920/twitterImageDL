@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from pathlib import Path
 
 class DownloadHistory:
@@ -19,7 +20,11 @@ class DownloadHistory:
             return json.load(f)
 
     def updateHistory(self, username, tweetId):
-        self._history[username] = { 'tweetId': tweetId }
+        currentTimeString = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        self._history[username] = {
+            'tweetId': tweetId,
+            'lastUpdate': currentTimeString,
+        }
 
     def getHistory(self, username):
         if username in self._history:

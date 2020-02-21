@@ -2,6 +2,8 @@ from pathlib import Path
 import shutil
 import sys
 import json
+import datetime
+import re
 
 import pytest
     
@@ -16,10 +18,10 @@ from download_history import DownloadHistory
 HISTORYFILE_EXIST = str(HISTORY_DIR / 'history_exist.json')
 HISTORYFILE_NOTYETEXIST = str(HISTORY_DIR / 'history_notyet.json')
 TESTHISTORIES = {
-    'user1': { 'tweetId': 'user1_1111'},
-    'user2': { 'tweetId': 'user2_2222'},
-    'user3': { 'tweetId': 'user3_3333'},
-    'user4': { 'tweetId': 'user4_4444'},
+    'user1': { 'tweetId': 'user1_1111', 'lastUpdate': '112233'},
+    'user2': { 'tweetId': 'user2_2222', 'lastUpdate': '112233'},
+    'user3': { 'tweetId': 'user3_3333', 'lastUpdate': '112233'},
+    'user4': { 'tweetId': 'user4_4444', 'lastUpdate': '112233'},
 }
 
 @pytest.fixture(scope='function')
@@ -43,6 +45,16 @@ class Test_DownloadHistory:
     def test_UpdateHistory(self, clearTestDIr):
         history = DownloadHistory(HISTORYFILE_NOTYETEXIST)
         history.updateHistory('user1', '112233')
+
+    def test_updateHistoryShouldUpdateLastUpdate(self, clearTestDIr, createTestFile):
+        history = DownloadHistory(HISTORYFILE_NOTYETEXIST)
+        lastupdatePattern = re.compile(r'^\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d$')
+        
+        history.updateHistory('user1', '112233')
+
+        lastupdate = history._history['user1']['lastUpdate']
+        assert lastupdate != TESTHISTORIES['user1']['lastUpdate']
+        assert lastupdatePattern.match(lastupdate)
 
     def test_GetHistoryFromNonExistantHistory(self, clearTestDIr):
         history = DownloadHistory(HISTORYFILE_NOTYETEXIST)

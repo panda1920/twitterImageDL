@@ -1,1 +1,1 @@
-{"user1": {"tweetId": "1--1--1"}, "user2": {"tweetId": "2--2--2"}, "user3": {"tweetId": "3--3--3"}, "user4": {"tweetId": "user4_4444"}}
+{"user1": {"tweetId": "1--1--1", "lastUpdate": "2020-02-22 03:55:17"}, "user2": {"tweetId": "2--2--2", "lastUpdate": "2020-02-22 03:55:17"}, "user3": {"tweetId": "3--3--3", "lastUpdate": "2020-02-22 03:55:17"}, "user4": {"tweetId": "user4_4444", "lastUpdate": "112233"}}
