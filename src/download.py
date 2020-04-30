@@ -1,3 +1,4 @@
+import logging
 import urllib.request
 import shutil
 from pathlib import Path
@@ -22,7 +23,7 @@ def download(url, dst):
         with urllib.request.urlopen(url) as response, open(dst, 'wb') as out_file:
             shutil.copyfileobj(response, out_file)
     except:
-        raise exceptions.DownloadErrorException(f'Failed to download from {url}')
+        logging.error(f'Failed to download from {url}')
 
 def createDownloadFilePath(url, saveLocation):
     lastslashIdx = url.rfind('/')
