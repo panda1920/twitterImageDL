@@ -2,8 +2,8 @@ from unittest.mock import create_autospec
 from pathlib import Path
 import json
 
-from retrieve_twitterAPI import TweetsRetrieve_TwitterAPI
-from download_history import DownloadHistory
+from twitter_image_dl.retrieve_twitterAPI import TweetsRetrieve_TwitterAPI
+from twitter_image_dl.download_history import DownloadHistory
 
 historyMock = create_autospec(DownloadHistory)
 historyMock.getHistory.return_value = None

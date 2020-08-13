@@ -4,12 +4,11 @@ import sys
 
 import pytest
     
-PROJECT_DIR = Path(__file__).resolve().parents[2]
+PROJECT_DIR = Path(__file__).resolve().parents[3]
 SRC_DIR = PROJECT_DIR / 'src'
 TEST_DL_LOCATION = PROJECT_DIR / 'testdata' / 'download'
 
-sys.path.append(str( SRC_DIR ))
-from twitterimagedl import dlmedia
+from twitter_image_dl.twitterimagedl import dlmedia
 
 @pytest.fixture(scope='function')
 def cleanupTestDL():

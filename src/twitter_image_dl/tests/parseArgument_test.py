@@ -3,16 +3,12 @@ import shutil
 import sys
 
 import pytest
+
+import twitter_image_dl.exceptions as exceptions
+from twitter_image_dl.parseArgument import parseArgument
     
-PROJECT_DIR = Path(__file__).resolve().parents[2]
-SRC_DIR = PROJECT_DIR / 'src'
+PROJECT_DIR = Path(__file__).resolve().parents[3]
 TESTDATA_DIR = PROJECT_DIR / 'testdata'
-
-sys.path.append(str( SRC_DIR ))
-
-import exceptions
-from parseArgument import parseArgument
-
 sysArgs = []
 
 @pytest.fixture(scope='function')

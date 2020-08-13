@@ -4,7 +4,7 @@ from urllib.error import HTTPError
 import json
 import time
 
-from twitterAPIAuthentication import createOAuth1HeaderString, createAuthInfo
+from twitter_image_dl.twitterAPIAuthentication import createOAuth1HeaderString, createAuthInfo
 
 class TweetsRetrieve_TwitterAPI:
     METHOD = 'GET'

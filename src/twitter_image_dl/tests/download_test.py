@@ -4,16 +4,13 @@ import sys
 import os.path
 
 import pytest
+
+import twitter_image_dl.exceptions as exceptions
+from twitter_image_dl.download import download, createDownloadFilePath, downloadMedia
     
-PROJECT_DIR = Path(__file__).resolve().parents[2]
-SRC_DIR = PROJECT_DIR / 'src'
+PROJECT_DIR = Path(__file__).resolve().parents[3]
 TEST_DL_LOCATION = PROJECT_DIR / 'testdata' / 'download'
 TESTIMAGE_LOCATION = PROJECT_DIR / 'testdata' / 'images'
-
-sys.path.append(str( SRC_DIR ))
-
-import exceptions
-from download import download, createDownloadFilePath, downloadMedia
 
 @pytest.fixture(scope='function')
 def cleanupTestDL():

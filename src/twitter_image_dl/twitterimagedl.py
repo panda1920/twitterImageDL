@@ -1,25 +1,27 @@
 from pathlib import Path
-from parseArgument import parseArgument
-from readUserList import readUserList
-from retrieve_twitterAPI import TweetsRetrieve_TwitterAPI
-from download import downloadMedia
-from download_history import DownloadHistory
+
+from twitter_image_dl.parseArgument import parseArgument
+from twitter_image_dl.readUserList import readUserList
+from twitter_image_dl.retrieve_twitterAPI import TweetsRetrieve_TwitterAPI
+from twitter_image_dl.download import downloadMedia
+from twitter_image_dl.download_history import DownloadHistory
 
 MEDIATYPES = ['images', 'gifs', 'videos']
 
 def dlmedia():
     settings = parseArgument()
+    users = readUserList(settings['usersListPath'])
     history = DownloadHistory(settings['historyPath'])
     tweetsRetrieve = TweetsRetrieve_TwitterAPI(history)
-    users = readUserList(settings['usersListPath'])
+
     for user in users:
         tweets = tweetsRetrieve.getTweetsInfo(user)
-        downloadUserMedia(settings, tweets, user)
+        downloadUserMedia(settings['saveLocation'], tweets, user)
     
     history.writeToFile()
 
-def downloadUserMedia(settings, tweets, username):
-    userSavePath = createAndReturnPath(settings['saveLocation'], username)
+def downloadUserMedia(saveLocation, tweets, username):
+    userSavePath = createAndReturnPath(saveLocation, username)
 
     for mediaType in MEDIATYPES:
         mediaSavePath = createAndReturnPath(userSavePath, mediaType)

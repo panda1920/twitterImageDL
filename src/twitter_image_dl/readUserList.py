@@ -1,5 +1,6 @@
-import exceptions
 import re
+
+import twitter_image_dl.exceptions as exceptions
 
 def readUserList(file):
     usernames = [

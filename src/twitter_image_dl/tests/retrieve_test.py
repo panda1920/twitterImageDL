@@ -5,14 +5,9 @@ from unittest.mock import create_autospec
 
 import pytest
     
-PROJECT_DIR = Path(__file__).resolve().parents[2]
-SRC_DIR = PROJECT_DIR / 'src'
-
-sys.path.append(str( SRC_DIR ))
-
-from retrieve_scraper import TweetsRetrieve_ScraperAPI
-from retrieve_twitterAPI import TweetsRetrieve_TwitterAPI
-from download_history import DownloadHistory
+from twitter_image_dl.retrieve_scraper import TweetsRetrieve_ScraperAPI
+from twitter_image_dl.retrieve_twitterAPI import TweetsRetrieve_TwitterAPI
+from twitter_image_dl.download_history import DownloadHistory
 
 TEST_USERNAME = 'poopoopanda21'
 MOST_RECENT_TWEET_ID = '1212458397720698880'

@@ -4,14 +4,11 @@ import sys
 
 import pytest
     
-PROJECT_DIR = Path(__file__).resolve().parents[2]
-SRC_DIR = PROJECT_DIR / 'src'
+import twitter_image_dl.exceptions as exceptions
+from twitter_image_dl.readUserList import getList, readUserList
+
+PROJECT_DIR = Path(__file__).resolve().parents[3]
 TEST_FILES_LOCATION = PROJECT_DIR / 'testdata' / 'userlists'
-
-sys.path.append(str( SRC_DIR ))
-
-import exceptions
-from readUserList import getList, readUserList
 
 def test_getList_ShouldReturnListOfSize3():
     filePath = TEST_FILES_LOCATION / 'list1.txt'

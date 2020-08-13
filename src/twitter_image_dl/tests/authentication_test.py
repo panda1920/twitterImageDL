@@ -3,13 +3,8 @@ import shutil
 import sys
 import os
 import pytest
-    
-PROJECT_DIR = Path(__file__).resolve().parents[2]
-SRC_DIR = PROJECT_DIR / 'src'
 
-sys.path.append(str( SRC_DIR ))
-
-from twitterAPIAuthentication import createOAuth1HeaderString, createSignature, createSignatureBaseString, createAuthInfo
+from twitter_image_dl.twitterAPIAuthentication import createOAuth1HeaderString, createSignature, createSignatureBaseString, createAuthInfo
 
 @pytest.fixture(scope='function')
 def setupTestEnviron():

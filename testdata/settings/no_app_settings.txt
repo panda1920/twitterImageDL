@@ -1,0 +1,5 @@
+[twitter API]
+access_token=test_access_token
+access_secret=test_access_secret
+consumer_token=test_consumer_token
+consumer_secret=test_consumer_secret

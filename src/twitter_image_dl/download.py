@@ -4,7 +4,7 @@ import shutil
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 
-import exceptions
+import twitter_image_dl.exceptions as exceptions
 
 def downloadMedia(urls, saveLocation):
     with ThreadPoolExecutor(max_workers=8) as executor:
@@ -22,8 +22,10 @@ def download(url, dst):
     try:
         with urllib.request.urlopen(url) as response, open(dst, 'wb') as out_file:
             shutil.copyfileobj(response, out_file)
-    except:
+    except Exception as e:
         logging.error(f'Failed to download from {url}')
+        logging.error(e)
+        raise exceptions.DownloadErrorException(f'Failed to download from {url}')
 
 def createDownloadFilePath(url, saveLocation):
     lastslashIdx = url.rfind('/')

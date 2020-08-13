@@ -6,14 +6,11 @@ import datetime
 import re
 
 import pytest
+
+from twitter_image_dl.download_history import DownloadHistory
     
-PROJECT_DIR = Path(__file__).resolve().parents[2]
-SRC_DIR = PROJECT_DIR / 'src'
+PROJECT_DIR = Path(__file__).resolve().parents[3]
 HISTORY_DIR = PROJECT_DIR / 'testdata' / 'history'
-
-sys.path.append(str( SRC_DIR ))
-
-from download_history import DownloadHistory
 
 HISTORYFILE_EXIST = str(HISTORY_DIR / 'history_exist.json')
 HISTORYFILE_NOTYETEXIST = str(HISTORY_DIR / 'history_notyet.json')

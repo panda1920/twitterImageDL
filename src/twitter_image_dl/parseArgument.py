@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-import exceptions
+import twitter_image_dl.exceptions as exceptions
 
 def parseArgument():
     checkArgLength(sys.argv)
