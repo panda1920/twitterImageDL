@@ -1,6 +1,6 @@
 ## Project overview
 This simple python application allows easy collection of media files on twitter.
-No more repetitive right click-save!
+No more repetitive right click-and-save!
 Intended to be used on Windows system.
 
 ## Prerequisites

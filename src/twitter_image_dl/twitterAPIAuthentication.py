@@ -4,9 +4,11 @@ import time
 import math
 import urllib.parse
 
-def createAuthInfo():
-    consumerKey = os.environ.get('CONSUMER_KEY', None)
-    accessToken = os.environ.get('ACCESS_TOKEN', None)
+import twitter_image_dl.setting_strings as strings
+
+def createAuthInfo(settings):
+    consumerKey = settings.get()[strings.API_SECTION][strings.CONSUMER_KEY]
+    accessToken = settings.get()[strings.API_SECTION][strings.ACCESS_TOKEN]
     nonce = uuid.uuid4().hex
     requestTime = str( math.floor(time.time()) )
     
@@ -19,8 +21,11 @@ def createAuthInfo():
         'oauth_version': '1.0',
     }
 
-def createOAuth1HeaderString(endpointUrl, method, queryString, body, authInfo):
-    authInfo['oauth_signature'] = createSignature(endpointUrl, method, queryString, body, authInfo)
+def createOAuth1HeaderString(endpointUrl, method, queryString, body, authInfo, settings):
+    authInfo['oauth_signature'] = createSignature(
+        endpointUrl, method, queryString,
+        body, authInfo, settings
+    )
 
     headerString = 'OAuth '
     for key, value in sorted(authInfo.items()):
@@ -28,13 +33,13 @@ def createOAuth1HeaderString(endpointUrl, method, queryString, body, authInfo):
 
     return headerString[:-2]
 
-def createSignature(endpointUrl, method, queryString, body, authInfo):
+def createSignature(endpointUrl, method, queryString, body, authInfo, settings):
     from hashlib import sha1
     import hmac
     import base64
 
     signatureString = createSignatureBaseString(endpointUrl, method, queryString, body, authInfo)
-    key = createSigningKey()
+    key = createSigningKey(settings)
     hashed = hmac.new(key.encode('utf-8'), signatureString.encode('utf-8'), sha1)
 
     return base64.encodebytes(hashed.digest()).decode('utf-8').rstrip('\n')
@@ -63,7 +68,7 @@ def createParameterString(params):
 
     return paramString[:-1]
 
-def createSigningKey():
-    consumerSecret = os.environ.get('CONSUMER_SECRET', None)
-    accessSecret = os.environ.get('ACCESS_SECRET', None)
+def createSigningKey(settings):
+    consumerSecret = settings.get()[strings.API_SECTION][strings.CONSUMER_SECRET]
+    accessSecret = settings.get()[strings.API_SECTION][strings.ACCESS_SECRET]
     return f'{quote(consumerSecret)}&{accessSecret}'

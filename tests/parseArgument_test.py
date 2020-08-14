@@ -7,7 +7,7 @@ import pytest
 import twitter_image_dl.exceptions as exceptions
 from twitter_image_dl.parseArgument import parseArgument
     
-PROJECT_DIR = Path(__file__).resolve().parents[3]
+PROJECT_DIR = Path(__file__).resolve().parents[1]
 TESTDATA_DIR = PROJECT_DIR / 'testdata'
 sysArgs = []
 

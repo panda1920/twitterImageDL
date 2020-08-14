@@ -4,5 +4,5 @@ save_location=
 [twitter API]
 access_token=
 access_secret=
-consumer_token=
+consumer_key=
 consumer_secret=

@@ -1,4 +1,15 @@
-testdata/download/*
-.env
+# test data
+testdata/download/
+
+# editor settings
 .vscode
 *.code-workspace
+
+# may contain sensitive data
+.env
+*.conf
+
+# ignore build files
+build/
+dist/
+*.spec

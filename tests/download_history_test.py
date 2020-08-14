@@ -9,7 +9,7 @@ import pytest
 
 from twitter_image_dl.download_history import DownloadHistory
     
-PROJECT_DIR = Path(__file__).resolve().parents[3]
+PROJECT_DIR = Path(__file__).resolve().parents[1]
 HISTORY_DIR = PROJECT_DIR / 'testdata' / 'history'
 
 HISTORYFILE_EXIST = str(HISTORY_DIR / 'history_exist.json')

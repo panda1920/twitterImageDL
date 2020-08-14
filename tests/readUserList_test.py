@@ -7,7 +7,7 @@ import pytest
 import twitter_image_dl.exceptions as exceptions
 from twitter_image_dl.readUserList import getList, readUserList
 
-PROJECT_DIR = Path(__file__).resolve().parents[3]
+PROJECT_DIR = Path(__file__).resolve().parents[1]
 TEST_FILES_LOCATION = PROJECT_DIR / 'testdata' / 'userlists'
 
 def test_getList_ShouldReturnListOfSize3():
@@ -25,11 +25,22 @@ def test_getList_ShouldIncludeEmptyLines():
     filecontent = getList(filePath)
     assert len( filecontent ) == 5
 
-def test_getList_ShouldThrowErrorWhenFIleNotExist():
+def test_readUserList_ShouldBeEmptyListWhenFileNotExist():
     filePath = TEST_FILES_LOCATION / 'NON_EXISTANT_FILE.txt'
 
-    with pytest.raises(exceptions.FileOpenErrorException):
-        filecontent = getList(filePath)
+    userList = readUserList(filePath)
+    assert len(userList) == 0
+    
+    filePath.unlink()
+
+def test_readUserList_ShouldCreateUserListFileWhenFileNotExist():
+    filePath = TEST_FILES_LOCATION / 'NON_EXISTANT_FILE.txt'
+    assert not filePath.exists()
+
+    readUserList(filePath)
+    
+    assert filePath.exists()
+    filePath.unlink()
 
 def test_readUserList_ShouldTrimNewLine():
     filePath = TEST_FILES_LOCATION / 'manypatterns.txt'

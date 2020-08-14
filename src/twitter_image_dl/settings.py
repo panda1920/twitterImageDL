@@ -37,7 +37,7 @@ class Settings:
             self._settings[strings.API_SECTION] = {
                 strings.ACCESS_TOKEN: self._get_default(strings.ACCESS_TOKEN),
                 strings.ACCESS_SECRET: self._get_default(strings.ACCESS_SECRET),
-                strings.CONSUMER_TOKEN: self._get_default(strings.CONSUMER_TOKEN),
+                strings.CONSUMER_KEY: self._get_default(strings.CONSUMER_KEY),
                 strings.CONSUMER_SECRET: self._get_default(strings.CONSUMER_SECRET),
             }
         

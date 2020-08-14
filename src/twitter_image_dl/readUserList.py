@@ -2,20 +2,21 @@ import re
 
 import twitter_image_dl.exceptions as exceptions
 
-def readUserList(file):
+def readUserList(filepath):
     usernames = [
         sanitizeUsername(username)
-        for username in getList(file)
+        for username in getList(filepath)
     ]
     usernames = removeDuplicates(usernames)
     return filterInvalidUsernames(usernames)
 
-def getList(file):
+def getList(filepath):
     try:
-        with open(file, 'r', encoding='utf-8') as f:
+        with open(filepath, 'r', encoding='utf-8') as f:
             return f.readlines()
     except Exception as e:
-        raise exceptions.FileOpenErrorException( str(e) )
+        filepath.touch()
+        return []
 
 def sanitizeUsername(username):
     sanitized = username.strip()

@@ -17,8 +17,9 @@ class TweetsRetrieve_TwitterAPI:
         'include_rts': 'false'
     }
 
-    def __init__(self, history):
+    def __init__(self, history, settings):
         self._history = history
+        self._settings = settings
 
     def getTweetsInfo(self, username):
         print(f'getting Tweets from {username}...')
@@ -134,6 +135,7 @@ class TweetsRetrieve_TwitterAPI:
                 self.METHOD,
                 queryString,
                 {},
-                createAuthInfo()
+                createAuthInfo(self._settings),
+                self._settings
             ),
         }

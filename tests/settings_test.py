@@ -7,7 +7,7 @@ import pytest
 import twitter_image_dl.setting_strings as strings
 from twitter_image_dl.settings import Settings
 
-PROJECT_DIR = Path(__file__).resolve().parents[3]
+PROJECT_DIR = Path(__file__).resolve().parents[1]
 TEST_DATA_DIR = PROJECT_DIR / 'testdata' / 'settings'
 TEST_SETTINGS_FILE = TEST_DATA_DIR / 'settings.txt'
 GOOD_SETTINGS_FILE = TEST_DATA_DIR / 'good_settings.txt'
@@ -25,7 +25,7 @@ class Test_readSettings:
 
         assert settings[strings.API_SECTION][strings.ACCESS_TOKEN] == 'test_access_token'
         assert settings[strings.API_SECTION][strings.ACCESS_SECRET] == 'test_access_secret'
-        assert settings[strings.API_SECTION][strings.CONSUMER_TOKEN] == 'test_consumer_token'
+        assert settings[strings.API_SECTION][strings.CONSUMER_KEY] == 'test_consumer_key'
         assert settings[strings.API_SECTION][strings.CONSUMER_SECRET] == 'test_consumer_secret'
 
     def test_shouldStripWhitespace_AfterParsing(self):
@@ -37,7 +37,7 @@ class Test_readSettings:
 
         assert settings[strings.API_SECTION][strings.ACCESS_TOKEN] == 'test_access_token'
         assert settings[strings.API_SECTION][strings.ACCESS_SECRET] == 'test_access_secret'
-        assert settings[strings.API_SECTION][strings.CONSUMER_TOKEN] == 'test_consumer_token'
+        assert settings[strings.API_SECTION][strings.CONSUMER_KEY] == 'test_consumer_key'
         assert settings[strings.API_SECTION][strings.CONSUMER_SECRET] == 'test_consumer_secret'
 
     def test_shouldInsertEmptyStringeAsDefaultValue_ForNonExistingSection(self):
@@ -47,7 +47,7 @@ class Test_readSettings:
 
         assert settings[strings.API_SECTION][strings.ACCESS_TOKEN] == ''
         assert settings[strings.API_SECTION][strings.ACCESS_SECRET] == ''
-        assert settings[strings.API_SECTION][strings.CONSUMER_TOKEN] == ''
+        assert settings[strings.API_SECTION][strings.CONSUMER_KEY] == ''
         assert settings[strings.API_SECTION][strings.CONSUMER_SECRET] == ''
 
     def test_shouldGenerateFilePathDirAsDefaultValue_ForNonExistingAppSection(self):
@@ -68,7 +68,7 @@ class Test_readSettings:
 
         assert settings[strings.API_SECTION][strings.ACCESS_TOKEN] == ''
         assert settings[strings.API_SECTION][strings.ACCESS_SECRET] == ''
-        assert settings[strings.API_SECTION][strings.CONSUMER_TOKEN] == ''
+        assert settings[strings.API_SECTION][strings.CONSUMER_KEY] == ''
         assert settings[strings.API_SECTION][strings.CONSUMER_SECRET] == ''
 
     def test_shouldGenerateEmptyString_whenOptionsAreEmpty(self):
@@ -81,7 +81,7 @@ class Test_readSettings:
 
         assert settings[strings.API_SECTION][strings.ACCESS_TOKEN] == ''
         assert settings[strings.API_SECTION][strings.ACCESS_SECRET] == ''
-        assert settings[strings.API_SECTION][strings.CONSUMER_TOKEN] == ''
+        assert settings[strings.API_SECTION][strings.CONSUMER_KEY] == ''
         assert settings[strings.API_SECTION][strings.CONSUMER_SECRET] == ''
 
 class Test_writeSettings:
@@ -93,7 +93,7 @@ class Test_writeSettings:
             strings.API_SECTION: {
                 strings.ACCESS_TOKEN: 'new',
                 strings.ACCESS_SECRET: 'new',
-                strings.CONSUMER_TOKEN: 'new',
+                strings.CONSUMER_KEY: 'new',
                 strings.CONSUMER_SECRET: 'new',
             },
         }
@@ -116,7 +116,7 @@ class Test_writeSettings:
             strings.API_SECTION: {
                 strings.ACCESS_TOKEN: 'new',
                 strings.ACCESS_SECRET: 'new',
-                strings.CONSUMER_TOKEN: 'new',
+                strings.CONSUMER_KEY: 'new',
                 strings.CONSUMER_SECRET: 'new',
             },
         }

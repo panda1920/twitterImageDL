@@ -8,7 +8,7 @@ import pytest
 import twitter_image_dl.exceptions as exceptions
 from twitter_image_dl.download import download, createDownloadFilePath, downloadMedia
     
-PROJECT_DIR = Path(__file__).resolve().parents[3]
+PROJECT_DIR = Path(__file__).resolve().parents[1]
 TEST_DL_LOCATION = PROJECT_DIR / 'testdata' / 'download'
 TESTIMAGE_LOCATION = PROJECT_DIR / 'testdata' / 'images'
 
