@@ -14,6 +14,8 @@ GOOD_SETTINGS_FILE = TEST_DATA_DIR / 'good_settings.txt'
 
 @pytest.fixture(scope='function', autouse=True)
 def clearTestData():
+    yield
+    
     if TEST_SETTINGS_FILE.exists():
         TEST_SETTINGS_FILE.unlink()
 
@@ -21,7 +23,7 @@ class Test_readSettings:
     def test_shouldReadValueFromGoodSettingFile(self):
         settings = Settings(GOOD_SETTINGS_FILE).get()
 
-        assert settings[strings.APP_SECTION]['save_location'] == r'C:\Users\user1\dir1\dir\dir3'
+        assert settings[strings.APP_SECTION]['save_location'] == Path(r'C:\Users\user1\dir1\dir\dir3')
 
         assert settings[strings.API_SECTION][strings.ACCESS_TOKEN] == 'test_access_token'
         assert settings[strings.API_SECTION][strings.ACCESS_SECRET] == 'test_access_secret'
@@ -33,7 +35,7 @@ class Test_readSettings:
 
         settings = Settings(space_settings_file).get()
 
-        assert settings[strings.APP_SECTION]['save_location'] == r'C:\Users\user1\dir1\dir\dir3'
+        assert settings[strings.APP_SECTION]['save_location'] == Path(r'C:\Users\user1\dir1\dir\dir3')
 
         assert settings[strings.API_SECTION][strings.ACCESS_TOKEN] == 'test_access_token'
         assert settings[strings.API_SECTION][strings.ACCESS_SECRET] == 'test_access_secret'
@@ -88,7 +90,7 @@ class Test_writeSettings:
     def test_setShouldReplaceSettingState(self):
         new_settings = {
             strings.APP_SECTION: {
-                strings.SAVE_LOCATION: 'new',
+                strings.SAVE_LOCATION: Path('new'),
             },
             strings.API_SECTION: {
                 strings.ACCESS_TOKEN: 'new',
@@ -111,7 +113,7 @@ class Test_writeSettings:
         app_settings = Settings(TEST_SETTINGS_FILE)
         new_settings = {
             strings.APP_SECTION: {
-                strings.SAVE_LOCATION: 'new',
+                strings.SAVE_LOCATION: Path('new'),
             },
             strings.API_SECTION: {
                 strings.ACCESS_TOKEN: 'new',

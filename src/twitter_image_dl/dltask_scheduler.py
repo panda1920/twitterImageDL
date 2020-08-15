@@ -1,5 +1,6 @@
-import subprocess
 from enum import Enum
+from pathlib import Path
+import subprocess
 
 class DltaskScheduler:
     class ScheduleOptions(Enum):
@@ -8,9 +9,13 @@ class DltaskScheduler:
         DAILY  = 3
         WEEKLY = 4
     TASKNAME = 'twitter_image_dl.dltask'
+    TASKPATH = Path(__file__)
 
     def register(self, schedule: ScheduleOptions):
-        self._schedule_task('/Create', '/SC', schedule.name)
+        self._schedule_task('/Create',
+            '/TR', str(self.TASKPATH),
+            '/SC', schedule.name,
+        )
 
     def deregister(self):
         self._schedule_task('/Delete', '/F')

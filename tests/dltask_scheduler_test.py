@@ -25,8 +25,12 @@ class Test_CallsToSubprocess:
         taskname_postion = args.index('/TN') + 1
         assert args[taskname_postion] == DltaskScheduler.TASKNAME
 
+        taskpath_position = args.index('/TR') + 1
+        assert args[taskpath_position] == str(DltaskScheduler.TASKPATH)
+        
         schedule_position = args.index('/SC') + 1
         assert args[schedule_position] == 'HOURLY'
+
 
     def test_deregisterShouldCallDelete(self, mocked_subprocess):
         scheduler = DltaskScheduler()

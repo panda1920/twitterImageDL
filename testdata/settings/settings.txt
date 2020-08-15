@@ -1,9 +1,0 @@
-[app settings]
-save_location = C:\Users\user1\dir1\dir\dir3
-
-[twitter API]
-access_token = test_access_token
-access_secret = test_access_secret
-consumer_key = test_consumer_key
-consumer_secret = test_consumer_secret
-

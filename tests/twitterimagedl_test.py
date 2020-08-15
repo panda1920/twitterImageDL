@@ -63,25 +63,3 @@ def test_dlMediaDownloads3Images():
     assert Path(TEST_DL_LOCATION, 'poopoopanda21', 'images', 'EGWZFWPUYAABM6m.jpg').exists()
     assert Path(TEST_DL_LOCATION, 'poopoopanda21', 'images', 'EGWZDQgU0AAAOgl.jpg').exists()
     assert Path(TEST_DL_LOCATION, 'poopoopanda21', 'images', 'EGWZAe4UEAAabKm.jpg').exists()
-
-# def test_dlmedia_raiseErrorWhenNoAPIOptionsAreFoundInSettings():
-#     test_settings = PROJECT_DIR / 'testdata' / 'settings' / 'empty.txt'
-#     shutil.copy(test_settings, PROJECT_DIR / 'settings.conf')
-#     bindings = RuntimeBindings(PROJECT_DIR)
-    
-#     with pytest.raises(exceptions.APINotFound) as e:
-#         dlmedia(bindings)
-
-#     try:
-#         (PROJECT_DIR / 'history.json').unlink()
-#         (PROJECT_DIR / 'users.txt').unlink()
-#     except:
-#         pass
-
-# def test_dlmedia_raiseErrorWhenSaveLocationDoesNotExist():
-#     test_settings = PROJECT_DIR / 'testdata' / 'settings' / 'good_settings.txt'
-#     shutil.copy(test_settings, PROJECT_DIR / 'settings.conf')
-#     bindings = RuntimeBindings(PROJECT_DIR)
-
-#     with pytest.raises(exceptions.SaveLocationNotExist) as e:
-#         dlmedia(bindings)

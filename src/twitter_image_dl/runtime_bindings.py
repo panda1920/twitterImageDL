@@ -15,8 +15,8 @@ for twitterimagedl.py
 Makes it easier to swap out classes with mocks/fakes for tests
 """
 class RuntimeBindings:
-    def __init__(self, path):
-        self._settings = Settings(path / 'settings.conf')
+    def __init__(self, settingspath):
+        self._settings = Settings(settingspath / 'settings.conf')
         self._validateSettings()
         self._save_location = Path(
             self._settings.get()[strings.APP_SECTION][strings.SAVE_LOCATION]

@@ -1,4 +1,6 @@
+from pathlib import Path
 from configparser import ConfigParser
+from copy import deepcopy
 
 import twitter_image_dl.setting_strings as strings
 
@@ -13,10 +15,16 @@ class Settings:
         self._normalizeSettings()
     
     def get(self):
-        return { **self._settings }
+        settings = deepcopy(self._settings)
+        # convert to Path object when presenting to outside world
+        settings[strings.APP_SECTION][strings.SAVE_LOCATION] = Path( settings[strings.APP_SECTION][strings.SAVE_LOCATION] )
+
+        return settings
 
     def set(self, settings):
-        self._settings = settings
+        self._settings = deepcopy(settings)
+        # store as normal string
+        self._settings[strings.APP_SECTION][strings.SAVE_LOCATION] = str( self._settings[strings.APP_SECTION][strings.SAVE_LOCATION] )
 
     def write(self):
         self._parser.read_dict(self._settings)
@@ -51,7 +59,7 @@ class Settings:
 
     def _get_default(self, option):
         default_value_getter = {
-            strings.SAVE_LOCATION: self._filepath.parents[0],
+            strings.SAVE_LOCATION: str(self._filepath.parents[0]),
         }
 
         return default_value_getter.get(option, '')
