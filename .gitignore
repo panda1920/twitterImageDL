@@ -9,7 +9,10 @@ testdata/download/
 .env
 *.conf
 
-# ignore build files
+# built files
 build/
 dist/
 *.spec
+
+# random code for experimenting
+playground/

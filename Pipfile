@@ -15,4 +15,4 @@ python_version = "3.7"
 
 [scripts]
 test = "pytest -ra"
-build = "pyinstaller -p ./src --name twitter-image-dl --noconfirm dl.py"
+build = "pyinstaller -p ./src --name twitter_image_dl --noconfirm dl.py"

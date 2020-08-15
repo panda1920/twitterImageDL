@@ -6,7 +6,7 @@ import time
 
 from twitter_image_dl.twitterAPIAuthentication import createOAuth1HeaderString, createAuthInfo
 
-class TweetsRetrieve_TwitterAPI:
+class TweetsRetriever_TwitterAPI:
     METHOD = 'GET'
     ENDPOINT_URL = 'https://api.twitter.com/1.1/statuses/user_timeline.json'
     DEFAULT_QUERY_STRING = {
