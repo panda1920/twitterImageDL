@@ -7,6 +7,7 @@ import pytest
 from twitter_image_dl.twitterimagedl import dlmedia
 from twitter_image_dl.runtime_bindings import RuntimeBindings
 import twitter_image_dl.exceptions as exceptions
+import twitter_image_dl.global_constants as constants
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 TEST_DL_LOCATION = PROJECT_DIR / 'testdata' / 'download'
@@ -28,8 +29,8 @@ def restoreSysArgs():
 
 @pytest.fixture(scope='function', autouse=True)
 def use_test_settings():
-    test_settings = PROJECT_DIR / 'testdata' / 'settings' / 'settings.conf'
-    copied_settings = PROJECT_DIR / 'settings.conf'
+    test_settings = PROJECT_DIR / 'testdata' / 'settings' / constants.FILENAME_SETTINGS
+    copied_settings = PROJECT_DIR / constants.FILENAME_SETTINGS
     shutil.copyfile(test_settings, copied_settings)
 
     yield
@@ -41,8 +42,8 @@ def test_dlMediaDownloads0ImagesWhenHistoryPresent():
     userListFile = PROJECT_DIR / 'testdata' / 'userlists'/ 'me.txt'
     existingHistory = PROJECT_DIR / 'testdata' / 'history' / 'history_poopoopanda21.json'
 
-    shutil.copyfile(existingHistory, TEST_DL_LOCATION / 'history.json')
-    shutil.copyfile(userListFile, TEST_DL_LOCATION / 'users.txt')
+    shutil.copyfile(existingHistory, TEST_DL_LOCATION / constants.FILENAME_HISTORY)
+    shutil.copyfile(userListFile, TEST_DL_LOCATION / constants.FILENAME_USERS)
     bindings = RuntimeBindings(PROJECT_DIR)
     
     dlmedia(bindings)
@@ -57,7 +58,7 @@ def test_dlMediaDownloads0ImagesWhenHistoryPresent():
 def test_dlMediaDownloads3Images():
     userListFile = PROJECT_DIR / 'testdata' / 'userlists'/ 'me.txt'
 
-    shutil.copyfile(userListFile, TEST_DL_LOCATION / 'users.txt')
+    shutil.copyfile(userListFile, TEST_DL_LOCATION / constants.FILENAME_USERS)
     bindings = RuntimeBindings(PROJECT_DIR)
 
     dlmedia(bindings)

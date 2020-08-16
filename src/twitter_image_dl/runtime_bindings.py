@@ -6,8 +6,10 @@ from twitter_image_dl.retrieve_twitterAPI import TweetsRetriever_TwitterAPI
 from twitter_image_dl.download_history import DownloadHistory
 from twitter_image_dl.settings import Settings
 from twitter_image_dl.download import downloadMedia
+from twitter_image_dl.dltask_scheduler import DltaskScheduler
 import twitter_image_dl.setting_strings as strings
 import twitter_image_dl.exceptions as exceptions
+import twitter_image_dl.global_constants as constants
 
 """
 Class that provides bindings to other dependant classes/functions
@@ -15,17 +17,20 @@ for twitterimagedl.py
 Makes it easier to swap out classes with mocks/fakes for tests
 """
 class RuntimeBindings:
-    def __init__(self, settingspath):
-        self._settings = Settings(settingspath / 'settings.conf')
+    def __init__(self, app_path):
+        self._settings = Settings(app_path / constants.FILENAME_SETTINGS)
         self._validateSettings()
         self._save_location = Path(
             self._settings.get()[strings.APP_SECTION][strings.SAVE_LOCATION]
         )
-        self._users = readUserList(self._save_location / 'users.txt')
-        self._history = DownloadHistory(self._save_location / 'history.json')
+        self._users = readUserList(self._save_location / constants.FILENAME_USERS)
+        self._history = DownloadHistory(
+            self._save_location / constants.FILENAME_HISTORY
+        )
         self._retriever = TweetsRetriever_TwitterAPI(
             self._history, self._settings
         )
+        self._scheduler = DltaskScheduler(app_path)
 
     def get_settings(self):
         return self._settings
@@ -41,6 +46,9 @@ class RuntimeBindings:
 
     def get_tweet_retriever(self):
         return self._retriever
+
+    def get_scheduler(self):
+        return self._scheduler
 
     def download_media(self, url, savepath):
         downloadMedia(url, savepath)

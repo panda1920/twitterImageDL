@@ -3,6 +3,7 @@ from unittest.mock import patch, Mock
 import pytest
 
 from twitter_image_dl.dltask_scheduler import DltaskScheduler
+import twitter_image_dl.global_constants as constants
 
 @pytest.fixture(scope='function')
 def mocked_subprocess():
@@ -11,8 +12,8 @@ def mocked_subprocess():
         yield mock
 
 class Test_CallsToSubprocess:
-    def test_registerShouldCallCreate(self, mocked_subprocess):
-        scheduler = DltaskScheduler()
+    def test_registerShouldCallCreate(self, tmp_path, mocked_subprocess):
+        scheduler = DltaskScheduler(tmp_path)
         
         scheduler.register(DltaskScheduler.ScheduleOptions.HOURLY)
 
@@ -23,17 +24,17 @@ class Test_CallsToSubprocess:
         assert args[1] == '/Create'
 
         taskname_postion = args.index('/TN') + 1
-        assert args[taskname_postion] == DltaskScheduler.TASKNAME
+        assert args[taskname_postion] == constants.TASKNAME
 
         taskpath_position = args.index('/TR') + 1
-        assert args[taskpath_position] == str(DltaskScheduler.TASKPATH)
+        assert args[taskpath_position] == str(tmp_path / constants.FILENAME_DL)
         
         schedule_position = args.index('/SC') + 1
         assert args[schedule_position] == 'HOURLY'
 
 
-    def test_deregisterShouldCallDelete(self, mocked_subprocess):
-        scheduler = DltaskScheduler()
+    def test_deregisterShouldCallDelete(self, tmp_path, mocked_subprocess):
+        scheduler = DltaskScheduler(tmp_path)
         
         scheduler.deregister()
 
