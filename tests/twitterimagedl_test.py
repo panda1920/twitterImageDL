@@ -36,6 +36,7 @@ def use_test_settings():
 
     copied_settings.unlink()
 
+@pytest.mark.flaky
 def test_dlMediaDownloads0ImagesWhenHistoryPresent():
     userListFile = PROJECT_DIR / 'testdata' / 'userlists'/ 'me.txt'
     existingHistory = PROJECT_DIR / 'testdata' / 'history' / 'history_poopoopanda21.json'
@@ -52,6 +53,7 @@ def test_dlMediaDownloads0ImagesWhenHistoryPresent():
 
     assert Path(existingHistory).exists()
 
+@pytest.mark.flaky
 def test_dlMediaDownloads3Images():
     userListFile = PROJECT_DIR / 'testdata' / 'userlists'/ 'me.txt'
 

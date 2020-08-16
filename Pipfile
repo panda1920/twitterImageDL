@@ -14,5 +14,5 @@ pytest = "*"
 python_version = "3.7"
 
 [scripts]
-test = "pytest -ra"
+test = "pytest -ra -m 'not (flaky)'"
 build = "pyinstaller -p ./src --name twitter_image_dl --noconfirm dl.py"

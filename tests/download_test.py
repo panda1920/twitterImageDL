@@ -34,6 +34,7 @@ def test_downloadLocalNonExistantImage(cleanupTestDL):
     with pytest.raises(exceptions.DownloadErrorException):
         download( str(fileToDL), str(downloadedFile) )
 
+@pytest.mark.flaky
 def test_downloadOnlineImage(cleanupTestDL):
     fileToDL = r'https://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2017/11/12234558/Chinook-On-White-03.jpg'
     downloadedFile = TEST_DL_LOCATION / 'onlinedog.jpg'
@@ -41,6 +42,7 @@ def test_downloadOnlineImage(cleanupTestDL):
     download( str(fileToDL), str(downloadedFile) )
     assert downloadedFile.exists()
 
+@pytest.mark.flaky
 def test_downloadOnlineNonExistantImage(cleanupTestDL):
     fileToDL = r'https://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2017/11/12234558/FOO.jpg'
     downloadedFile = TEST_DL_LOCATION / 'onlinedog.jpg'
@@ -48,6 +50,7 @@ def test_downloadOnlineNonExistantImage(cleanupTestDL):
     with pytest.raises(exceptions.DownloadErrorException):
         download( str(fileToDL), str(downloadedFile) )
 
+@pytest.mark.flaky
 def test_createDownloadFilePath(cleanupTestDL):
     saveLocation = str(TEST_DL_LOCATION)
     fileToDL = r'https://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2017/11/12234558/Chinook-On-White-03.jpg'
@@ -55,6 +58,7 @@ def test_createDownloadFilePath(cleanupTestDL):
 
     assert createDownloadFilePath(fileToDL, saveLocation) == str(filepath)
 
+@pytest.mark.flaky
 def test_downloadImagesDownloadsImage(cleanupTestDL):
     saveLocation = str(TEST_DL_LOCATION)
     fileToDL = r'https://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2017/11/12234558/Chinook-On-White-03.jpg'

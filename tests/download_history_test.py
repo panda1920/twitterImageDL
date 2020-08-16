@@ -12,8 +12,8 @@ from twitter_image_dl.download_history import DownloadHistory
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 HISTORY_DIR = PROJECT_DIR / 'testdata' / 'history'
 
-HISTORYFILE_EXIST = str(HISTORY_DIR / 'history_exist.json')
-HISTORYFILE_NOTYETEXIST = str(HISTORY_DIR / 'history_notyet.json')
+HISTORYFILE_EXIST = HISTORY_DIR / 'history_exist.json'
+HISTORYFILE_NOTYETEXIST = HISTORY_DIR / 'history_notyet.json'
 TESTHISTORIES = {
     'user1': { 'tweetId': 'user1_1111', 'lastUpdate': '112233'},
     'user2': { 'tweetId': 'user2_2222', 'lastUpdate': '112233'},
@@ -23,11 +23,11 @@ TESTHISTORIES = {
 
 @pytest.fixture(scope='function')
 def clearTestDIr():
-    for f in HISTORY_DIR.iterdir():
-        if f.is_file():
-            f.unlink()
-        elif f.is_dir():
-            shutil.rmtree(f)
+    yield
+    if HISTORYFILE_EXIST.exists():
+        HISTORYFILE_EXIST.unlink()
+    if HISTORYFILE_NOTYETEXIST.exists():
+        HISTORYFILE_NOTYETEXIST.unlink()
 
 @pytest.fixture(scope='function')
 def createTestFile():
