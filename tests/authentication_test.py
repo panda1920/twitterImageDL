@@ -49,14 +49,14 @@ class TestOauth1:
         assert signatureBaseString == referenceSignatureBaseString
 
     def test_createSignature(self, test_settings):
-        signature = createSignature(
+        baseString = createSignatureBaseString(
             self.testURLEndpoint,
             self.testHTTPMethod,
             self.testQueryString,
             self.testRequestBody,
-            self.createDummyAuthInfo(test_settings),
-            test_settings,
+            self.createDummyAuthInfo(test_settings)
         )
+        signature = createSignature(baseString, test_settings)
         referenceSignature = 'hCtSmYh+iHYCEqBWrE7C7hYmtUk='
         assert signature == referenceSignature
 

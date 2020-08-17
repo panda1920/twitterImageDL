@@ -23,8 +23,8 @@ def createAuthInfo(settings):
 
 def createOAuth1HeaderString(endpointUrl, method, queryString, body, authInfo, settings):
     authInfo['oauth_signature'] = createSignature(
-        endpointUrl, method, queryString,
-        body, authInfo, settings
+        createSignatureBaseString(endpointUrl, method, queryString, body, authInfo),
+        settings
     )
 
     headerString = 'OAuth '
@@ -33,14 +33,13 @@ def createOAuth1HeaderString(endpointUrl, method, queryString, body, authInfo, s
 
     return headerString[:-2]
 
-def createSignature(endpointUrl, method, queryString, body, authInfo, settings):
+def createSignature(signatureBaseString, settings):
     from hashlib import sha1
     import hmac
     import base64
 
-    signatureString = createSignatureBaseString(endpointUrl, method, queryString, body, authInfo)
     key = createSigningKey(settings)
-    hashed = hmac.new(key.encode('utf-8'), signatureString.encode('utf-8'), sha1)
+    hashed = hmac.new(key.encode('utf-8'), signatureBaseString.encode('utf-8'), sha1)
 
     return base64.encodebytes(hashed.digest()).decode('utf-8').rstrip('\n')
 
@@ -66,7 +65,7 @@ def createParameterString(params):
     for key, value in sorted(quotedParams.items()):
         paramString += f'{key}={value}&'
 
-    return paramString[:-1]
+    return paramString[:-1] # remove last '&'
 
 def createSigningKey(settings):
     consumerSecret = settings.get()[strings.API_SECTION][strings.CONSUMER_SECRET]

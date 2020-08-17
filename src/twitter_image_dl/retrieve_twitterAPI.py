@@ -27,29 +27,29 @@ class TweetsRetriever_TwitterAPI:
         allTweets = self.getAllTweetsFromUser(username)
 
         return [
-            self.makeTweetInfo(tweet) for tweet in allTweets
-            if self.tweetHaveMedia(tweet)
+            self._create_tweet_info(tweet) for tweet in allTweets
+            if self._has_media(tweet)
         ]
 
-    def makeTweetInfo(self, tweet):
+    def _create_tweet_info(self, tweet):
         return {
             'text': tweet['text'],
-            'timestamp': self.convertCreatedAtToEpochTime(tweet['created_at']),
-            'images': self.extractImageURLsFromTweet(tweet),
-            'videos': self.extractVideoURLsFromTweet(tweet),
-            'gifs': self.extractGifURLsFromTweet(tweet),
+            'timestamp': self._convertCreatedAtToEpochTime(tweet['created_at']),
+            'images': self._extractImageURLs(tweet),
+            'videos': self._extractVideoURLs(tweet),
+            'gifs': self._extractGifURLs(tweet),
         }
 
-    def convertCreatedAtToEpochTime(self, createdAt):
+    def _convertCreatedAtToEpochTime(self, createdAt):
         return time.mktime(time.strptime(createdAt,"%a %b %d %H:%M:%S +0000 %Y"))
 
-    def extractImageURLsFromTweet(self, tweet):
+    def _extractImageURLs(self, tweet):
         return [
             image['media_url'] for image in tweet['extended_entities']['media']
             if image['type'] == 'photo'
         ]
         
-    def extractGifURLsFromTweet(self, tweet):
+    def _extractGifURLs(self, tweet):
         return [
             gif['video_info']['variants'][0]['url'] for gif in tweet['extended_entities']['media']
             if gif['type'] == 'animated_gif'
@@ -57,7 +57,7 @@ class TweetsRetriever_TwitterAPI:
         # url in tweet is in mp4 format for some reason...
         # might have to make some conversion function or calls to other micro service
 
-    def extractVideoURLsFromTweet(self, tweet):
+    def _extractVideoURLs(self, tweet):
         # extracts the highest quality video from tweet
         videoVariants = [
             video['video_info']['variants'] for video in tweet['extended_entities']['media']
@@ -80,7 +80,7 @@ class TweetsRetriever_TwitterAPI:
 
         return videos
 
-    def tweetHaveMedia(self, tweet):
+    def _has_media(self, tweet):
         return 'extended_entities' in tweet
 
     def getAllTweetsFromUser(self, username):
@@ -105,18 +105,20 @@ class TweetsRetriever_TwitterAPI:
             self._history.updateHistory(username, mostRecentTweetId)
 
     def getTweets(self, username, maxId, mostRecentTweetId):
-        queryString = self.createQueryString(username, maxId, mostRecentTweetId)
-        headers = self.createHeader(queryString)
-        url = f'{self.ENDPOINT_URL}?{urllib.parse.urlencode(queryString)}'
-        request = urllib.request.Request(url, headers=headers, method=self.METHOD)
+        request = self._create_request_object(username, maxId, mostRecentTweetId)
 
         try:
             with urllib.request.urlopen(request) as response:
-                tweets = json.loads( response.read() )
-                return tweets
+                return json.loads( response.read() )
         except HTTPError:
             print(f'failed to retrieve tweet from user {username}')
             return []
+
+    def _create_request_object(self, username, maxId, mostRecentTweetId):
+        queryString = self.createQueryString(username, maxId, mostRecentTweetId)
+        headers = self.createHeader(queryString)
+        url = f'{self.ENDPOINT_URL}?{urllib.parse.urlencode(queryString)}'
+        return urllib.request.Request(url, headers=headers, method=self.METHOD)
 
     def createQueryString(self, username, maxId, mostRecentTweetId):
         queryString = self.DEFAULT_QUERY_STRING.copy()
