@@ -7,7 +7,7 @@ from twitter_image_dl.download_history import DownloadHistory
 from twitter_image_dl.settings import Settings
 from twitter_image_dl.download import downloadMedia
 from twitter_image_dl.dltask_scheduler import DltaskScheduler
-import twitter_image_dl.setting_strings as strings
+import twitter_image_dl.global_constants as constants
 import twitter_image_dl.exceptions as exceptions
 import twitter_image_dl.global_constants as constants
 
@@ -21,7 +21,7 @@ class RuntimeBindings:
         self._settings = Settings(app_path / constants.FILENAME_SETTINGS)
         self._validateSettings()
         self._save_location = Path(
-            self._settings.get()[strings.APP_SECTION][strings.SAVE_LOCATION]
+            self._settings.get()[constants.APP_SECTION][constants.SAVE_LOCATION]
         )
         self._users = readUserList(self._save_location / constants.FILENAME_USERS)
         self._history = DownloadHistory(
@@ -56,13 +56,13 @@ class RuntimeBindings:
     def _validateSettings(self):
         app_settings = self._settings.get()
         if (
-            app_settings[strings.API_SECTION][strings.ACCESS_TOKEN] == '' or
-            app_settings[strings.API_SECTION][strings.ACCESS_SECRET] == '' or
-            app_settings[strings.API_SECTION][strings.CONSUMER_KEY] == '' or
-            app_settings[strings.API_SECTION][strings.CONSUMER_SECRET] == ''
+            app_settings[constants.API_SECTION][constants.ACCESS_TOKEN] == '' or
+            app_settings[constants.API_SECTION][constants.ACCESS_SECRET] == '' or
+            app_settings[constants.API_SECTION][constants.CONSUMER_KEY] == '' or
+            app_settings[constants.API_SECTION][constants.CONSUMER_SECRET] == ''
         ):
             raise exceptions.APINotFound('Please make sure to fill out twitter API related options in settings')
         if (
-            not Path(app_settings[strings.APP_SECTION][strings.SAVE_LOCATION]).exists()
+            not Path(app_settings[constants.APP_SECTION][constants.SAVE_LOCATION]).exists()
         ):
             raise exceptions.SaveLocationNotExist('Please make sure to specify a valid save location in settings')

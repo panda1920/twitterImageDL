@@ -6,7 +6,7 @@ from unittest.mock import create_autospec
 
 import pytest
 
-import twitter_image_dl.setting_strings as strings
+import twitter_image_dl.global_constants as constants
 from twitter_image_dl.settings import Settings
 from twitter_image_dl.twitterAPIAuthentication import createOAuth1HeaderString, createSignature, createSignatureBaseString, createAuthInfo
 
@@ -14,11 +14,11 @@ from twitter_image_dl.twitterAPIAuthentication import createOAuth1HeaderString, 
 def test_settings():
     mocked_settings = create_autospec(spec=Settings)
     mocked_settings.get.return_value = {
-        strings.API_SECTION: {
-            strings.CONSUMER_KEY: 'xvz1evFS4wEEPTGEFPHBog',
-            strings.CONSUMER_SECRET: 'kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw',
-            strings.ACCESS_TOKEN: '370773112-GmHxMAgYyLbNEtIKZeRNFsMKPR9EyMZeS9weJAEb',
-            strings.ACCESS_SECRET: 'LswwdoUaIvS8ltyTt5jkRh4J50vUPVVHtR2YPi5kE',
+        constants.API_SECTION: {
+            constants.CONSUMER_KEY: 'xvz1evFS4wEEPTGEFPHBog',
+            constants.CONSUMER_SECRET: 'kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw',
+            constants.ACCESS_TOKEN: '370773112-GmHxMAgYyLbNEtIKZeRNFsMKPR9EyMZeS9weJAEb',
+            constants.ACCESS_SECRET: 'LswwdoUaIvS8ltyTt5jkRh4J50vUPVVHtR2YPi5kE',
         }
     }
 

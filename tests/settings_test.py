@@ -4,7 +4,7 @@ import shutil
 
 import pytest
 
-import twitter_image_dl.setting_strings as strings
+import twitter_image_dl.global_constants as constants
 from twitter_image_dl.settings import Settings
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
@@ -23,34 +23,34 @@ class Test_readSettings:
     def test_shouldReadValueFromGoodSettingFile(self):
         settings = Settings(GOOD_SETTINGS_FILE).get()
 
-        assert settings[strings.APP_SECTION]['save_location'] == Path(r'C:\Users\user1\dir1\dir\dir3')
+        assert settings[constants.APP_SECTION]['save_location'] == Path(r'C:\Users\user1\dir1\dir\dir3')
 
-        assert settings[strings.API_SECTION][strings.ACCESS_TOKEN] == 'test_access_token'
-        assert settings[strings.API_SECTION][strings.ACCESS_SECRET] == 'test_access_secret'
-        assert settings[strings.API_SECTION][strings.CONSUMER_KEY] == 'test_consumer_key'
-        assert settings[strings.API_SECTION][strings.CONSUMER_SECRET] == 'test_consumer_secret'
+        assert settings[constants.API_SECTION][constants.ACCESS_TOKEN] == 'test_access_token'
+        assert settings[constants.API_SECTION][constants.ACCESS_SECRET] == 'test_access_secret'
+        assert settings[constants.API_SECTION][constants.CONSUMER_KEY] == 'test_consumer_key'
+        assert settings[constants.API_SECTION][constants.CONSUMER_SECRET] == 'test_consumer_secret'
 
     def test_shouldStripWhitespace_AfterParsing(self):
         space_settings_file = TEST_DATA_DIR / 'settings_spaces.txt'
 
         settings = Settings(space_settings_file).get()
 
-        assert settings[strings.APP_SECTION]['save_location'] == Path(r'C:\Users\user1\dir1\dir\dir3')
+        assert settings[constants.APP_SECTION]['save_location'] == Path(r'C:\Users\user1\dir1\dir\dir3')
 
-        assert settings[strings.API_SECTION][strings.ACCESS_TOKEN] == 'test_access_token'
-        assert settings[strings.API_SECTION][strings.ACCESS_SECRET] == 'test_access_secret'
-        assert settings[strings.API_SECTION][strings.CONSUMER_KEY] == 'test_consumer_key'
-        assert settings[strings.API_SECTION][strings.CONSUMER_SECRET] == 'test_consumer_secret'
+        assert settings[constants.API_SECTION][constants.ACCESS_TOKEN] == 'test_access_token'
+        assert settings[constants.API_SECTION][constants.ACCESS_SECRET] == 'test_access_secret'
+        assert settings[constants.API_SECTION][constants.CONSUMER_KEY] == 'test_consumer_key'
+        assert settings[constants.API_SECTION][constants.CONSUMER_SECRET] == 'test_consumer_secret'
 
     def test_shouldInsertEmptyStringeAsDefaultValue_ForNonExistingSection(self):
         no_api_section = TEST_DATA_DIR / 'no_twitter_api.txt'
         
         settings = Settings(no_api_section).get()
 
-        assert settings[strings.API_SECTION][strings.ACCESS_TOKEN] == ''
-        assert settings[strings.API_SECTION][strings.ACCESS_SECRET] == ''
-        assert settings[strings.API_SECTION][strings.CONSUMER_KEY] == ''
-        assert settings[strings.API_SECTION][strings.CONSUMER_SECRET] == ''
+        assert settings[constants.API_SECTION][constants.ACCESS_TOKEN] == ''
+        assert settings[constants.API_SECTION][constants.ACCESS_SECRET] == ''
+        assert settings[constants.API_SECTION][constants.CONSUMER_KEY] == ''
+        assert settings[constants.API_SECTION][constants.CONSUMER_SECRET] == ''
 
     def test_shouldGenerateFilePathDirAsDefaultValue_ForNonExistingAppSection(self):
         no_app_section = TEST_DATA_DIR / 'no_app_settings.txt'
@@ -58,7 +58,7 @@ class Test_readSettings:
 
         settings = Settings(no_app_section).get()
 
-        assert settings[strings.APP_SECTION][strings.SAVE_LOCATION] == file_location
+        assert settings[constants.APP_SECTION][constants.SAVE_LOCATION] == file_location
 
     def test_shouldGenerateDefaultValues_whenFileNonExistant(self):
         nonexistant_file = TEST_DATA_DIR / '123120381028309128309123.txt'
@@ -66,12 +66,12 @@ class Test_readSettings:
 
         settings = Settings(nonexistant_file).get()
 
-        assert settings[strings.APP_SECTION][strings.SAVE_LOCATION] == file_location
+        assert settings[constants.APP_SECTION][constants.SAVE_LOCATION] == file_location
 
-        assert settings[strings.API_SECTION][strings.ACCESS_TOKEN] == ''
-        assert settings[strings.API_SECTION][strings.ACCESS_SECRET] == ''
-        assert settings[strings.API_SECTION][strings.CONSUMER_KEY] == ''
-        assert settings[strings.API_SECTION][strings.CONSUMER_SECRET] == ''
+        assert settings[constants.API_SECTION][constants.ACCESS_TOKEN] == ''
+        assert settings[constants.API_SECTION][constants.ACCESS_SECRET] == ''
+        assert settings[constants.API_SECTION][constants.CONSUMER_KEY] == ''
+        assert settings[constants.API_SECTION][constants.CONSUMER_SECRET] == ''
 
     def test_shouldGenerateEmptyString_whenOptionsAreEmpty(self):
         empty_file = TEST_DATA_DIR / 'empty.txt'
@@ -79,24 +79,24 @@ class Test_readSettings:
 
         settings = Settings(empty_file).get()
 
-        assert settings[strings.APP_SECTION][strings.SAVE_LOCATION] == file_location
+        assert settings[constants.APP_SECTION][constants.SAVE_LOCATION] == file_location
 
-        assert settings[strings.API_SECTION][strings.ACCESS_TOKEN] == ''
-        assert settings[strings.API_SECTION][strings.ACCESS_SECRET] == ''
-        assert settings[strings.API_SECTION][strings.CONSUMER_KEY] == ''
-        assert settings[strings.API_SECTION][strings.CONSUMER_SECRET] == ''
+        assert settings[constants.API_SECTION][constants.ACCESS_TOKEN] == ''
+        assert settings[constants.API_SECTION][constants.ACCESS_SECRET] == ''
+        assert settings[constants.API_SECTION][constants.CONSUMER_KEY] == ''
+        assert settings[constants.API_SECTION][constants.CONSUMER_SECRET] == ''
 
 class Test_writeSettings:
     def test_setShouldReplaceSettingState(self):
         new_settings = {
-            strings.APP_SECTION: {
-                strings.SAVE_LOCATION: Path('new'),
+            constants.APP_SECTION: {
+                constants.SAVE_LOCATION: Path('new'),
             },
-            strings.API_SECTION: {
-                strings.ACCESS_TOKEN: 'new',
-                strings.ACCESS_SECRET: 'new',
-                strings.CONSUMER_KEY: 'new',
-                strings.CONSUMER_SECRET: 'new',
+            constants.API_SECTION: {
+                constants.ACCESS_TOKEN: 'new',
+                constants.ACCESS_SECRET: 'new',
+                constants.CONSUMER_KEY: 'new',
+                constants.CONSUMER_SECRET: 'new',
             },
         }
         app_settings = Settings(GOOD_SETTINGS_FILE)
@@ -112,14 +112,14 @@ class Test_writeSettings:
         shutil.copyfile(GOOD_SETTINGS_FILE, TEST_SETTINGS_FILE)
         app_settings = Settings(TEST_SETTINGS_FILE)
         new_settings = {
-            strings.APP_SECTION: {
-                strings.SAVE_LOCATION: Path('new'),
+            constants.APP_SECTION: {
+                constants.SAVE_LOCATION: Path('new'),
             },
-            strings.API_SECTION: {
-                strings.ACCESS_TOKEN: 'new',
-                strings.ACCESS_SECRET: 'new',
-                strings.CONSUMER_KEY: 'new',
-                strings.CONSUMER_SECRET: 'new',
+            constants.API_SECTION: {
+                constants.ACCESS_TOKEN: 'new',
+                constants.ACCESS_SECRET: 'new',
+                constants.CONSUMER_KEY: 'new',
+                constants.CONSUMER_SECRET: 'new',
             },
         }
 

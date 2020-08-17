@@ -10,7 +10,7 @@ from twitter_image_dl.download_history import DownloadHistory
 from twitter_image_dl.dltask_scheduler import DltaskScheduler
 from twitter_image_dl.settings import Settings
 import twitter_image_dl.exceptions as exceptions
-import twitter_image_dl.setting_strings as strings
+import twitter_image_dl.global_constants as constants
 import twitter_image_dl.global_constants as constants
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
@@ -66,28 +66,28 @@ def implement_mock_settings(mock_settings):
     mock_settings.return_value = create_autospec(Settings)
 
     mock_settings.return_value.get.return_value = {
-        strings.APP_SECTION: {
-            strings.SAVE_LOCATION: DOWNLOAD_DIR
+        constants.APP_SECTION: {
+            constants.SAVE_LOCATION: DOWNLOAD_DIR
         },
-        strings.API_SECTION: {
-            strings.ACCESS_TOKEN: 'some_value',
-            strings.ACCESS_SECRET: 'some_value',
-            strings.CONSUMER_KEY: 'some_value',
-            strings.CONSUMER_SECRET: 'some_value',
+        constants.API_SECTION: {
+            constants.ACCESS_TOKEN: 'some_value',
+            constants.ACCESS_SECRET: 'some_value',
+            constants.CONSUMER_KEY: 'some_value',
+            constants.CONSUMER_SECRET: 'some_value',
         }
     }
 
 class TestValidations:
     def test_raiseErrorWhenNoAPIOptionsAreFoundInSettings(self, tmp_path, mocks):
         mocks['settings'].return_value.get.return_value = {
-            strings.APP_SECTION: {
-                strings.SAVE_LOCATION: tmp_path
+            constants.APP_SECTION: {
+                constants.SAVE_LOCATION: tmp_path
             },
-            strings.API_SECTION: {
-                strings.ACCESS_TOKEN: '',
-                strings.ACCESS_SECRET: '',
-                strings.CONSUMER_KEY: '',
-                strings.CONSUMER_SECRET: '',
+            constants.API_SECTION: {
+                constants.ACCESS_TOKEN: '',
+                constants.ACCESS_SECRET: '',
+                constants.CONSUMER_KEY: '',
+                constants.CONSUMER_SECRET: '',
             }
         }
         
@@ -96,14 +96,14 @@ class TestValidations:
 
     def test_raiseErrorWhenSaveLocationDoesNotExist(self, tmp_path, mocks):
         mocks['settings'].return_value.get.return_value = {
-            strings.APP_SECTION: {
-                strings.SAVE_LOCATION: Path('some', 'nonexistant', 'path')
+            constants.APP_SECTION: {
+                constants.SAVE_LOCATION: Path('some', 'nonexistant', 'path')
             },
-            strings.API_SECTION: {
-                strings.ACCESS_TOKEN: 'some_value',
-                strings.ACCESS_SECRET: 'some_value',
-                strings.CONSUMER_KEY: 'some_value',
-                strings.CONSUMER_SECRET: 'some_value',
+            constants.API_SECTION: {
+                constants.ACCESS_TOKEN: 'some_value',
+                constants.ACCESS_SECRET: 'some_value',
+                constants.CONSUMER_KEY: 'some_value',
+                constants.CONSUMER_SECRET: 'some_value',
             }
         }
 
@@ -121,7 +121,7 @@ class TestInstantiation:
     def test_pathPassedToReadUserListIsSaveLocationInSetting(self, tmp_path, mocks):
         bindings = RuntimeBindings(tmp_path)
         settings = mocks['settings'](DOWNLOAD_DIR).get()
-        save_location = settings[strings.APP_SECTION][strings.SAVE_LOCATION]
+        save_location = settings[constants.APP_SECTION][constants.SAVE_LOCATION]
 
         assert len(mocks['readuserlist'].call_args_list) == 1
         path, *_ = mocks['readuserlist'].call_args_list[0][0]
@@ -130,7 +130,7 @@ class TestInstantiation:
     def test_pathPassedToHistoryIsSaveLocationInSetting(self, tmp_path, mocks):
         bindings = RuntimeBindings(tmp_path)
         settings = mocks['settings'](DOWNLOAD_DIR).get()
-        save_location = settings[strings.APP_SECTION][strings.SAVE_LOCATION]
+        save_location = settings[constants.APP_SECTION][constants.SAVE_LOCATION]
 
         assert len(mocks['history'].call_args_list) == 1
         path, *_ = mocks['history'].call_args_list[0][0]

@@ -2,7 +2,7 @@ from pathlib import Path
 from configparser import ConfigParser
 from copy import deepcopy
 
-import twitter_image_dl.setting_strings as strings
+import twitter_image_dl.global_constants as constants
 
 class Settings:
     def __init__(self, filepath):
@@ -17,14 +17,14 @@ class Settings:
     def get(self):
         settings = deepcopy(self._settings)
         # convert to Path object when presenting to outside world
-        settings[strings.APP_SECTION][strings.SAVE_LOCATION] = Path( settings[strings.APP_SECTION][strings.SAVE_LOCATION] )
+        settings[constants.APP_SECTION][constants.SAVE_LOCATION] = Path( settings[constants.APP_SECTION][constants.SAVE_LOCATION] )
 
         return settings
 
     def set(self, settings):
         self._settings = deepcopy(settings)
         # store as normal string
-        self._settings[strings.APP_SECTION][strings.SAVE_LOCATION] = str( self._settings[strings.APP_SECTION][strings.SAVE_LOCATION] )
+        self._settings[constants.APP_SECTION][constants.SAVE_LOCATION] = str( self._settings[constants.APP_SECTION][constants.SAVE_LOCATION] )
 
     def write(self):
         self._parser.read_dict(self._settings)
@@ -41,25 +41,25 @@ class Settings:
             self._settings[section] = { k: items[k] for k in items }
 
     def _normalizeSettings(self):
-        if strings.API_SECTION not in self._settings:
-            self._settings[strings.API_SECTION] = {
-                strings.ACCESS_TOKEN: self._get_default(strings.ACCESS_TOKEN),
-                strings.ACCESS_SECRET: self._get_default(strings.ACCESS_SECRET),
-                strings.CONSUMER_KEY: self._get_default(strings.CONSUMER_KEY),
-                strings.CONSUMER_SECRET: self._get_default(strings.CONSUMER_SECRET),
+        if constants.API_SECTION not in self._settings:
+            self._settings[constants.API_SECTION] = {
+                constants.ACCESS_TOKEN: self._get_default(constants.ACCESS_TOKEN),
+                constants.ACCESS_SECRET: self._get_default(constants.ACCESS_SECRET),
+                constants.CONSUMER_KEY: self._get_default(constants.CONSUMER_KEY),
+                constants.CONSUMER_SECRET: self._get_default(constants.CONSUMER_SECRET),
             }
         
-        if strings.APP_SECTION not in self._settings:
-            self._settings[strings.APP_SECTION] = {
-                strings.SAVE_LOCATION: self._get_default(strings.SAVE_LOCATION)
+        if constants.APP_SECTION not in self._settings:
+            self._settings[constants.APP_SECTION] = {
+                constants.SAVE_LOCATION: self._get_default(constants.SAVE_LOCATION)
             }
         
-        if self._settings[strings.APP_SECTION][strings.SAVE_LOCATION] == '':
-            self._settings[strings.APP_SECTION][strings.SAVE_LOCATION] = self._get_default(strings.SAVE_LOCATION)
+        if self._settings[constants.APP_SECTION][constants.SAVE_LOCATION] == '':
+            self._settings[constants.APP_SECTION][constants.SAVE_LOCATION] = self._get_default(constants.SAVE_LOCATION)
 
     def _get_default(self, option):
         default_value_getter = {
-            strings.SAVE_LOCATION: str(self._filepath.parents[0]),
+            constants.SAVE_LOCATION: str(self._filepath.parents[0]),
         }
 
         return default_value_getter.get(option, '')
