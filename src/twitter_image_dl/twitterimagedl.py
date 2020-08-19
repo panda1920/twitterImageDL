@@ -2,18 +2,22 @@ from pathlib import Path
 
 from twitter_image_dl.parseArgument import parseArgument
 from twitter_image_dl.runtime_bindings import RuntimeBindings
+import twitter_image_dl.global_constants as constants
 
 MEDIATYPES = ['images', 'gifs', 'videos']
 
 def dlmedia(bindings):
     # settings = parseArgument()
+    bindings.get_settings().validate_settings()
     users = bindings.get_users()
+    history_path = bindings.get_save_location() / constants.FILENAME_HISTORY
+    bindings.get_history().loadFromFile(history_path)
 
     for user in users:
         tweets = bindings.get_tweet_retriever().getTweetsInfo(user)
         downloadUserMedia(bindings, tweets, user)
     
-    bindings.get_history().writeToFile()
+    bindings.get_history().writeToFile(history_path)
 
 def downloadUserMedia(bindings, tweets, username):
     userSavePath = createAndReturnPath(bindings.get_save_location(), username)

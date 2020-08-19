@@ -15,5 +15,9 @@ build/
 dist/
 *.spec
 
+# cache
+__pycache__/
+.pytest_cache/
+
 # random code for experimenting
 playground/

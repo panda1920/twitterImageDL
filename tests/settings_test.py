@@ -5,12 +5,13 @@ import shutil
 import pytest
 
 import twitter_image_dl.global_constants as constants
+import twitter_image_dl.exceptions as exceptions
 from twitter_image_dl.settings import Settings
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 TEST_DATA_DIR = PROJECT_DIR / 'testdata' / 'settings'
 TEST_SETTINGS_FILE = TEST_DATA_DIR / 'settings.txt'
-GOOD_SETTINGS_FILE = TEST_DATA_DIR / 'good_settings.txt'
+SAMPLE_SETTINGS_FILE = TEST_DATA_DIR / 'sample_settings.txt'
 
 @pytest.fixture(scope='function', autouse=True)
 def clearTestData():
@@ -21,7 +22,7 @@ def clearTestData():
 
 class Test_readSettings:
     def test_shouldReadValueFromGoodSettingFile(self):
-        settings = Settings(GOOD_SETTINGS_FILE).get()
+        settings = Settings(SAMPLE_SETTINGS_FILE).get()
 
         assert settings[constants.APP_SECTION]['save_location'] == Path(r'C:\Users\user1\dir1\dir\dir3')
 
@@ -99,7 +100,7 @@ class Test_writeSettings:
                 constants.CONSUMER_SECRET: 'new',
             },
         }
-        app_settings = Settings(GOOD_SETTINGS_FILE)
+        app_settings = Settings(SAMPLE_SETTINGS_FILE)
 
         app_settings.set(new_settings)
         
@@ -109,7 +110,7 @@ class Test_writeSettings:
                 assert settings[section_name][option_name] == option
 
     def test_writeShouldWriteValueToSettingsFile(self):
-        shutil.copyfile(GOOD_SETTINGS_FILE, TEST_SETTINGS_FILE)
+        shutil.copyfile(SAMPLE_SETTINGS_FILE, TEST_SETTINGS_FILE)
         app_settings = Settings(TEST_SETTINGS_FILE)
         new_settings = {
             constants.APP_SECTION: {
@@ -135,13 +136,27 @@ class Test_writeSettings:
         assert TEST_SETTINGS_FILE.exists() == False
 
         app_settings = Settings(TEST_SETTINGS_FILE)
-        good_settings = Settings(GOOD_SETTINGS_FILE).get()
+        sample_settings = Settings(SAMPLE_SETTINGS_FILE).get()
 
-        app_settings.set(good_settings)
+        app_settings.set(sample_settings)
         app_settings.write()
 
         assert TEST_SETTINGS_FILE.exists() == True
         settings = Settings(TEST_SETTINGS_FILE).get()
-        for section_name, section in good_settings.items():
+        for section_name, section in sample_settings.items():
             for option_name, option in section.items():
                 assert settings[section_name][option_name] == option
+
+class TestValidation:
+    def test_raiseErrorWhenNoAPIOptionsAreFoundInSettings(self):
+        empty_file = TEST_DATA_DIR / 'empty.txt'
+        app_settings = Settings(empty_file)
+
+        with pytest.raises(exceptions.APINotFound) as e:
+            app_settings.validate_settings()
+
+    def test_raiseErrorWhenSaveLocationDoesNotExist(self):
+        app_settings = Settings(SAMPLE_SETTINGS_FILE)
+
+        with pytest.raises(exceptions.SaveLocationNotExist) as e:
+            app_settings.validate_settings()

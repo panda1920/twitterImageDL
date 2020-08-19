@@ -8,16 +8,18 @@ class DownloadHistory:
     Used to reduce unnecessary api calls to twitter.
     """
 
-    def __init__(self, historyPath):
-        self._historyPath = Path(historyPath)
-        self._history = self._loadHistory()
+    def __init__(self):
+        # self._historyPath = Path(historyPath)
+        self._history = {}
+        pass
 
-    def _loadHistory(self):
-        if not self._historyPath.exists():
-            return {}
+    def loadFromFile(self, filepath):
+        if not filepath.exists():
+            self._history = {}
+            return
 
-        with self._historyPath.open('r', encoding='utf-8') as f:
-            return json.load(f)
+        with filepath.open('r', encoding='utf-8') as f:
+            self._history = json.load(f)
 
     def updateHistory(self, username, tweetId):
         currentTimeString = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
@@ -32,6 +34,6 @@ class DownloadHistory:
         else:
             return None
 
-    def writeToFile(self):
-        with self._historyPath.open('w', encoding='utf-8') as f:
+    def writeToFile(self, filepath):
+        with filepath.open('w', encoding='utf-8') as f:
             json.dump(self._history, f)

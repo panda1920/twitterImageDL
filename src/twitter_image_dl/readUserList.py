@@ -7,8 +7,7 @@ def readUserList(filepath):
         sanitizeUsername(username)
         for username in getList(filepath)
     ]
-    usernames = removeDuplicates(usernames)
-    return filterInvalidUsernames(usernames)
+    return removeInvalidUsernames( removeDuplicates(usernames) )
 
 def getList(filepath):
     try:
@@ -33,5 +32,9 @@ def removeDuplicates(usernames):
 
     return uniques
 
-def filterInvalidUsernames(usernames):
-    return [username for username in usernames if re.match(r'^[A-Za-z0-9_]+$', username)]
+def removeInvalidUsernames(usernames):
+    valid_pattern = r'^[A-Za-z0-9_]+$'
+    return [
+        username for username in usernames
+        if re.match(valid_pattern, username)
+    ]

@@ -77,39 +77,6 @@ def implement_mock_settings(mock_settings):
         }
     }
 
-class TestValidations:
-    def test_raiseErrorWhenNoAPIOptionsAreFoundInSettings(self, tmp_path, mocks):
-        mocks['settings'].return_value.get.return_value = {
-            constants.APP_SECTION: {
-                constants.SAVE_LOCATION: tmp_path
-            },
-            constants.API_SECTION: {
-                constants.ACCESS_TOKEN: '',
-                constants.ACCESS_SECRET: '',
-                constants.CONSUMER_KEY: '',
-                constants.CONSUMER_SECRET: '',
-            }
-        }
-        
-        with pytest.raises(exceptions.APINotFound) as e:
-            bindings = RuntimeBindings(tmp_path)
-
-    def test_raiseErrorWhenSaveLocationDoesNotExist(self, tmp_path, mocks):
-        mocks['settings'].return_value.get.return_value = {
-            constants.APP_SECTION: {
-                constants.SAVE_LOCATION: Path('some', 'nonexistant', 'path')
-            },
-            constants.API_SECTION: {
-                constants.ACCESS_TOKEN: 'some_value',
-                constants.ACCESS_SECRET: 'some_value',
-                constants.CONSUMER_KEY: 'some_value',
-                constants.CONSUMER_SECRET: 'some_value',
-            }
-        }
-
-        with pytest.raises(exceptions.SaveLocationNotExist) as e:
-            bindings = RuntimeBindings(tmp_path)
-
 class TestInstantiation:
     def test_instantiatedSettingIsPassedAppPath(self, tmp_path, mocks):
         bindings = RuntimeBindings(tmp_path)
@@ -127,14 +94,10 @@ class TestInstantiation:
         path, *_ = mocks['readuserlist'].call_args_list[0][0]
         assert path == save_location / constants.FILENAME_USERS
 
-    def test_pathPassedToHistoryIsSaveLocationInSetting(self, tmp_path, mocks):
+    def test_historyIsInstantiated(self, tmp_path, mocks):
         bindings = RuntimeBindings(tmp_path)
-        settings = mocks['settings'](DOWNLOAD_DIR).get()
-        save_location = settings[constants.APP_SECTION][constants.SAVE_LOCATION]
 
         assert len(mocks['history'].call_args_list) == 1
-        path, *_ = mocks['history'].call_args_list[0][0]
-        assert path == save_location / constants.FILENAME_HISTORY
 
     def test_instantiatedSettingAndHistoryIsPassedToRetriever(self, tmp_path, mocks):
         bindings = RuntimeBindings(tmp_path)
