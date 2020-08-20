@@ -9,9 +9,7 @@ class DownloadHistory:
     """
 
     def __init__(self):
-        # self._historyPath = Path(historyPath)
         self._history = {}
-        pass
 
     def loadFromFile(self, filepath):
         if not filepath.exists():

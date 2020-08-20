@@ -7,6 +7,7 @@ from twitter_image_dl.download_history import DownloadHistory
 from twitter_image_dl.settings import Settings
 from twitter_image_dl.download import downloadMedia
 from twitter_image_dl.dltask_scheduler import DltaskScheduler
+from twitter_image_dl.abort_flag import AbortFlag
 import twitter_image_dl.global_constants as constants
 import twitter_image_dl.exceptions as exceptions
 import twitter_image_dl.global_constants as constants
@@ -28,6 +29,7 @@ class RuntimeBindings:
             self._history, self._settings
         )
         self._scheduler = DltaskScheduler(app_path)
+        self._abort = AbortFlag()
 
     def get_settings(self):
         return self._settings
@@ -46,6 +48,9 @@ class RuntimeBindings:
 
     def get_scheduler(self):
         return self._scheduler
+
+    def get_abort(self):
+        return self._abort
 
     def download_media(self, url, savepath):
         downloadMedia(url, savepath)

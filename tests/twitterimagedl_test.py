@@ -9,6 +9,7 @@ from twitter_image_dl.twitterimagedl import dlmedia
 from twitter_image_dl.runtime_bindings import RuntimeBindings
 from twitter_image_dl.download_history import DownloadHistory
 from twitter_image_dl.settings import Settings
+from twitter_image_dl.abort_flag import AbortFlag
 import twitter_image_dl.exceptions as exceptions
 import twitter_image_dl.global_constants as constants
 
@@ -45,6 +46,8 @@ def mock_bindings():
     bindings = create_autospec(RuntimeBindings)
     bindings.get_settings.return_value = create_autospec(Settings)
     bindings.get_history.return_value = create_autospec(DownloadHistory)
+    bindings.get_abort.return_value = create_autospec(AbortFlag)
+    bindings.get_abort.return_value.is_set.return_value = False
     bindings.get_save_location.return_value = TEST_DL_LOCATION
 
     return bindings
@@ -65,7 +68,6 @@ def test_dlmediaShouldLoadFromHistoryFile(mock_bindings):
     filepath, *_ = mock_history.loadFromFile.call_args_list[0][0]
     assert filepath == TEST_DL_LOCATION / constants.FILENAME_HISTORY
     
-
 def test_dlmediaShouldWriteToHistoryFile(mock_bindings):
     mock_history = mock_bindings.get_history.return_value
 
@@ -74,6 +76,24 @@ def test_dlmediaShouldWriteToHistoryFile(mock_bindings):
     assert len(mock_history.writeToFile.call_args_list) == 1
     filepath, *_ = mock_history.writeToFile.call_args_list[0][0]
     assert filepath == TEST_DL_LOCATION / constants.FILENAME_HISTORY
+
+def test_dlmediaShouldCheckAbortFlag_ForEveryUser(mock_bindings):
+    users = ['abby', 'bobby', 'charlie', 'daddy']
+    mock_bindings.get_users.return_value = users
+    mock_abort = mock_bindings.get_abort.return_value
+
+    dlmedia(mock_bindings)
+    assert len(mock_abort.is_set.call_args_list) == len(users)
+
+def test_dlmedaShouldNotCallDownloadMedia_whenAbortFlagIsSet(mock_bindings):
+    users = ['abby', 'bobby', 'charlie', 'daddy']
+    mock_bindings.get_users.return_value = users
+    mock_bindings.get_abort.return_value.is_set.return_value = True
+    mock_download_media = mock_bindings.download_media
+
+    dlmedia(mock_bindings)
+
+    assert len(mock_download_media.call_args_list) == 0
 
 @pytest.mark.flaky
 def test_dlMediaDownloads0ImagesWhenHistoryPresent():

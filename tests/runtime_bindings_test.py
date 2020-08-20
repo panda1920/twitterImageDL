@@ -9,6 +9,7 @@ from twitter_image_dl.retrieve_twitterAPI import TweetsRetriever_TwitterAPI
 from twitter_image_dl.download_history import DownloadHistory
 from twitter_image_dl.dltask_scheduler import DltaskScheduler
 from twitter_image_dl.settings import Settings
+from twitter_image_dl.abort_flag import AbortFlag
 import twitter_image_dl.exceptions as exceptions
 import twitter_image_dl.global_constants as constants
 import twitter_image_dl.global_constants as constants
@@ -40,11 +41,16 @@ def mocks():
         patch(
             'twitter_image_dl.runtime_bindings.DltaskScheduler',
             autospec=True
-        ) as mock_scheduler \
+        ) as mock_scheduler, \
+        patch(
+            'twitter_image_dl.runtime_bindings.AbortFlag',
+            autospec=True
+        ) as mock_abort \
     :
         mock_retriever.return_value = create_autospec(TweetsRetriever_TwitterAPI)
         mock_history.return_value = create_autospec(DownloadHistory)
         mock_scheduler.return_value = create_autospec(DltaskScheduler)
+        mock_abort.return_value = create_autospec(AbortFlag)
         implement_mock_settings(mock_settings)
 
         yield dict(
@@ -54,6 +60,7 @@ def mocks():
             settings=mock_settings,
             downloadmedia=mock_downloadmedia,
             scheduler=mock_scheduler,
+            abort=mock_abort,
         )
 
 @pytest.fixture(scope='function', autouse=True)
@@ -116,3 +123,8 @@ class TestInstantiation:
         assert len(mock_scheduler.call_args_list) == 1
         path, *_ = mock_scheduler.call_args_list[0][0]
         assert path == tmp_path
+
+    def test_abortFlagIsInstantiated(self, tmp_path, mocks):
+        bindings = RuntimeBindings(tmp_path)
+        
+        assert len(mocks['abort'].call_args_list) == 1

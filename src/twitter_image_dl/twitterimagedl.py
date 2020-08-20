@@ -1,4 +1,5 @@
 from pathlib import Path
+import pdb
 
 from twitter_image_dl.parseArgument import parseArgument
 from twitter_image_dl.runtime_bindings import RuntimeBindings
@@ -8,24 +9,29 @@ MEDIATYPES = ['images', 'gifs', 'videos']
 
 def dlmedia(bindings):
     # settings = parseArgument()
+    # pdb.set_trace()
     bindings.get_settings().validate_settings()
-    users = bindings.get_users()
     history_path = bindings.get_save_location() / constants.FILENAME_HISTORY
     bindings.get_history().loadFromFile(history_path)
 
-    for user in users:
-        tweets = bindings.get_tweet_retriever().getTweetsInfo(user)
-        downloadUserMedia(bindings, tweets, user)
+    downloadUserMedia(bindings)
     
     bindings.get_history().writeToFile(history_path)
 
-def downloadUserMedia(bindings, tweets, username):
-    userSavePath = createAndReturnPath(bindings.get_save_location(), username)
+def downloadUserMedia(bindings):
+    users = bindings.get_users()
 
-    for mediaType in MEDIATYPES:
-        mediaSavePath = createAndReturnPath(userSavePath, mediaType)
-        mediaURLs = getFileURLsFromTweets(tweets, mediaType)
-        bindings.download_media(mediaURLs, mediaSavePath)
+    for username in users:
+        if bindings.get_abort().is_set():
+            break
+        
+        userSavePath = createAndReturnPath(bindings.get_save_location(), username)
+        tweets = bindings.get_tweet_retriever().getTweetsInfo(username)
+
+        for mediaType in MEDIATYPES:
+            mediaSavePath = createAndReturnPath(userSavePath, mediaType)
+            mediaURLs = getFileURLsFromTweets(tweets, mediaType)
+            bindings.download_media(mediaURLs, mediaSavePath)
 
 def getFileURLsFromTweets(tweets, mediaType):
     fileURLs = []
