@@ -1,6 +1,7 @@
 # test data
 testdata/download/
 testdata/temp/
+testdata/save_location
 
 # editor settings
 .vscode

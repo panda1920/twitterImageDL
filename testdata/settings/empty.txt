@@ -1,4 +1,4 @@
-[app settings]
+[general settings]
 save_location=
 
 [twitter API]

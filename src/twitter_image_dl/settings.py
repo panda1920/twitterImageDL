@@ -18,14 +18,15 @@ class Settings:
     def get(self):
         settings = deepcopy(self._settings)
         # convert to Path object when presenting to outside world
-        settings[constants.APP_SECTION][constants.SAVE_LOCATION] = Path( settings[constants.APP_SECTION][constants.SAVE_LOCATION] )
+        settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION] = Path( settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION] )
 
         return settings
 
     def set(self, settings):
-        self._settings = deepcopy(settings)
+        copy = deepcopy(settings)
+        self._settings.update(copy)
         # store as normal string
-        self._settings[constants.APP_SECTION][constants.SAVE_LOCATION] = str( self._settings[constants.APP_SECTION][constants.SAVE_LOCATION] )
+        self._settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION] = str( self._settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION] )
 
     def write(self):
         self._parser.read_dict(self._settings)
@@ -41,7 +42,7 @@ class Settings:
         ):
             raise exceptions.APINotFound('Please make sure to fill out twitter API related options in settings')
         if (
-            not Path(self._settings[constants.APP_SECTION][constants.SAVE_LOCATION]).exists()
+            not Path(self._settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION]).exists()
         ):
             raise exceptions.SaveLocationNotExist('Please make sure to specify a valid save location in settings')
 
@@ -63,13 +64,13 @@ class Settings:
                 constants.CONSUMER_SECRET: self._get_default(constants.CONSUMER_SECRET),
             }
         
-        if constants.APP_SECTION not in self._settings:
-            self._settings[constants.APP_SECTION] = {
+        if constants.GENERAL_SECTION not in self._settings:
+            self._settings[constants.GENERAL_SECTION] = {
                 constants.SAVE_LOCATION: self._get_default(constants.SAVE_LOCATION)
             }
         
-        if self._settings[constants.APP_SECTION][constants.SAVE_LOCATION] == '':
-            self._settings[constants.APP_SECTION][constants.SAVE_LOCATION] = self._get_default(constants.SAVE_LOCATION)
+        if self._settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION] == '':
+            self._settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION] = self._get_default(constants.SAVE_LOCATION)
 
     def _get_default(self, option):
         default_value_getter = {

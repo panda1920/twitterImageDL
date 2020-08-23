@@ -21,7 +21,7 @@ class RuntimeBindings:
     def __init__(self, app_path):
         self._settings = Settings(app_path / constants.FILENAME_SETTINGS)
         self._save_location = Path(
-            self._settings.get()[constants.APP_SECTION][constants.SAVE_LOCATION]
+            self._settings.get()[constants.GENERAL_SECTION][constants.SAVE_LOCATION]
         )
         self._users = readUserList(self._save_location / constants.FILENAME_USERS)
         self._history = DownloadHistory()

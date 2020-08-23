@@ -73,7 +73,7 @@ def implement_mock_settings(mock_settings):
     mock_settings.return_value = create_autospec(Settings)
 
     mock_settings.return_value.get.return_value = {
-        constants.APP_SECTION: {
+        constants.GENERAL_SECTION: {
             constants.SAVE_LOCATION: DOWNLOAD_DIR
         },
         constants.API_SECTION: {
@@ -95,7 +95,7 @@ class TestInstantiation:
     def test_pathPassedToReadUserListIsSaveLocationInSetting(self, tmp_path, mocks):
         bindings = RuntimeBindings(tmp_path)
         settings = mocks['settings'](DOWNLOAD_DIR).get()
-        save_location = settings[constants.APP_SECTION][constants.SAVE_LOCATION]
+        save_location = settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION]
 
         assert len(mocks['readuserlist'].call_args_list) == 1
         path, *_ = mocks['readuserlist'].call_args_list[0][0]

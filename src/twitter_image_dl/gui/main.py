@@ -5,7 +5,7 @@ from threading import Thread
 from twitter_image_dl.gui.terminal_output import TerminalOutput
 from twitter_image_dl.twitterimagedl import dlmedia
 
-class Main:
+class MainPage:
     """
     Widget that represents the main page of GUI
     """
@@ -21,9 +21,14 @@ class Main:
             self._main, text='download',
             command=self._start_download_background
         )
+        self._settings_button = ttk.Button(
+            self._main, text='settings',
+            command=lambda: self._main.lower()
+        )
         self._terminal = TerminalOutput(self._bindings, self._main)
 
         self._start_button.grid(column=0, row=0)
+        self._settings_button.grid(column=1, row=0)
         self._terminal.grid(column=0, row=1, sticky='nsew')
 
         # make sure dl task is terminated ASAP when GUI is closed

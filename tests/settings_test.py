@@ -24,7 +24,7 @@ class Test_readSettings:
     def test_shouldReadValueFromGoodSettingFile(self):
         settings = Settings(SAMPLE_SETTINGS_FILE).get()
 
-        assert settings[constants.APP_SECTION]['save_location'] == Path(r'C:\Users\user1\dir1\dir\dir3')
+        assert settings[constants.GENERAL_SECTION]['save_location'] == Path(r'C:\Users\user1\dir1\dir\dir3')
 
         assert settings[constants.API_SECTION][constants.ACCESS_TOKEN] == 'test_access_token'
         assert settings[constants.API_SECTION][constants.ACCESS_SECRET] == 'test_access_secret'
@@ -36,7 +36,7 @@ class Test_readSettings:
 
         settings = Settings(space_settings_file).get()
 
-        assert settings[constants.APP_SECTION]['save_location'] == Path(r'C:\Users\user1\dir1\dir\dir3')
+        assert settings[constants.GENERAL_SECTION]['save_location'] == Path(r'C:\Users\user1\dir1\dir\dir3')
 
         assert settings[constants.API_SECTION][constants.ACCESS_TOKEN] == 'test_access_token'
         assert settings[constants.API_SECTION][constants.ACCESS_SECRET] == 'test_access_secret'
@@ -59,7 +59,7 @@ class Test_readSettings:
 
         settings = Settings(no_app_section).get()
 
-        assert settings[constants.APP_SECTION][constants.SAVE_LOCATION] == file_location
+        assert settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION] == file_location
 
     def test_shouldGenerateDefaultValues_whenFileNonExistant(self):
         nonexistant_file = TEST_DATA_DIR / '123120381028309128309123.txt'
@@ -67,7 +67,7 @@ class Test_readSettings:
 
         settings = Settings(nonexistant_file).get()
 
-        assert settings[constants.APP_SECTION][constants.SAVE_LOCATION] == file_location
+        assert settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION] == file_location
 
         assert settings[constants.API_SECTION][constants.ACCESS_TOKEN] == ''
         assert settings[constants.API_SECTION][constants.ACCESS_SECRET] == ''
@@ -80,7 +80,7 @@ class Test_readSettings:
 
         settings = Settings(empty_file).get()
 
-        assert settings[constants.APP_SECTION][constants.SAVE_LOCATION] == file_location
+        assert settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION] == file_location
 
         assert settings[constants.API_SECTION][constants.ACCESS_TOKEN] == ''
         assert settings[constants.API_SECTION][constants.ACCESS_SECRET] == ''
@@ -90,7 +90,7 @@ class Test_readSettings:
 class Test_writeSettings:
     def test_setShouldReplaceSettingState(self):
         new_settings = {
-            constants.APP_SECTION: {
+            constants.GENERAL_SECTION: {
                 constants.SAVE_LOCATION: Path('new'),
             },
             constants.API_SECTION: {
@@ -113,7 +113,7 @@ class Test_writeSettings:
         shutil.copyfile(SAMPLE_SETTINGS_FILE, TEST_SETTINGS_FILE)
         app_settings = Settings(TEST_SETTINGS_FILE)
         new_settings = {
-            constants.APP_SECTION: {
+            constants.GENERAL_SECTION: {
                 constants.SAVE_LOCATION: Path('new'),
             },
             constants.API_SECTION: {
