@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+# creates a spec file so that multiple executables can share its dependencies
+# trying to avoid size bloat
+# https://pyinstaller.readthedocs.io/en/v3.3.1/spec-files.html#multipackage-bundles
 
 from pathlib import Path
 import re
@@ -59,7 +62,6 @@ dl_prefix = 'dl_'
 renamed_dl = rename_object(parsed_dl, 'dl_')
 gui_prefix = 'gui_'
 renamed_gui = rename_object(parsed_gui, 'gui_')
-
 merge_clause = f'MERGE( ({gui_prefix}a, "gui", "gui"), ({dl_prefix}a, "dl", "twitter_image_dl") )\n'
 
 with SPECPATH_BUILD.open('w', encoding='utf-8') as f:
