@@ -22,9 +22,7 @@ class SettingsPage(ttk.Frame):
 
     def _create_widgets(self):
         self._label = ttk.Label(self, text='settings page')
-        self._button = ttk.Button(self, text='close', command=lambda:
-            self.lower()
-        )
+        self._button = ttk.Button(self, text='close')
         self._general_settings = GeneralSettings(self._bindings, self)
         self._api_settings = APISettings(self._bindings, self)
         self._selections = SettingSelection(self._bindings, self,
@@ -32,13 +30,18 @@ class SettingsPage(ttk.Frame):
         )
 
     def _set_widget_positions(self):
-        self._label.grid(column=0, row=0, columnspan=2)
-        self._general_settings.grid(column=1, row=1, sticky='nsew')
-        self._api_settings.grid(column=1, row=1, sticky='nsew')
-        self._selections.grid(column=0, row=1, sticky='nsew')
-        self._button.grid(column=0, row=2, columnspan=2)
+        self._label.grid(row=0, column=0, columnspan=2)
+        self._general_settings.grid(row=1, column=1, sticky='nsew')
+        self._api_settings.grid(row=1, column=1, sticky='nsew')
+        self._selections.grid(row=1, column=0, sticky='nsew', rowspan=2)
+        self._button.grid(row=2, column=1, sticky='sew')
+        
+        self.columnconfigure(1, weight=1)
+        self.rowconfigure(1, weight=1)
+        self.rowconfigure(2, weight=1)
 
     def _bind_callbacks(self):
+        self._button.configure(command=lambda: self.lower())
         self._selections.set_selection_callback(self._display_setting_page)
 
     def _display_setting_page(self, selection):

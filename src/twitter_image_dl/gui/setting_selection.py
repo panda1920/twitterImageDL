@@ -12,9 +12,10 @@ class SettingSelection(ttk.Frame):
 
     def _initializeWidgets(self, selections):
         self._selections = tk.StringVar(value=selections)
-        self._list = tk.Listbox(self, selectmode='single', height=5, listvariable=self._selections)
+        self._list = tk.Listbox(self, selectmode='single', listvariable=self._selections)
 
-        self._list.grid(column=0, row=0, sticky='nsew')
+        self._list.grid(row=0, column=0, sticky='nsew')
+        self.rowconfigure(0, weight=1)
         self._list.bind('<<ListboxSelect>>', self._select_handler)
 
     def _select_handler(self, event):

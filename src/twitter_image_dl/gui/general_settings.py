@@ -11,8 +11,7 @@ class GeneralSettings(ttk.Frame):
 
     def lift(self, *args):
         super().lift(*args)
-        self._load_input_values()
-        self._apply_button.configure(state='disabled')
+        self._reload_inputs()
         
     def _initializeWidgets(self):
         self._create_widgets()
@@ -33,9 +32,10 @@ class GeneralSettings(ttk.Frame):
     def _set_widget_positions(self):
         for idx, input in enumerate( self._inputs.values() ):
             input['label'].grid(column=0, row=idx, sticky='w')
-            input['entry'].grid(column=1, row=idx)
-
-        self._apply_button.grid(column=1, row=4, sticky='e')
+            input['entry'].grid(column=1, row=idx, sticky='we')
+        self._apply_button.grid(row=2, column=1, sticky='e')
+        
+        self.columnconfigure(1, weight=1)
 
     def _load_input_values(self):
         settings = self._bindings.get_settings().get()
@@ -60,4 +60,18 @@ class GeneralSettings(ttk.Frame):
         for input in self._inputs.values():
             general_section[input['key']] = input['entry'].get()
 
-        print(f'writing {new_settings} to file!')
+        try:
+            self._bindings.get_settings().set(new_settings)
+            self._bindings.get_settings().write()
+            print('Successfuly updated settings file')
+        except e as Exception:
+            print('Failed to update settings file')
+        
+    def _reload_inputs(self):
+        self._empty_inputs()
+        self._load_input_values()
+        self._apply_button.configure(state='disabled')
+
+    def _empty_inputs(self):
+        for input in self._inputs.values():
+            input['entry'].delete(0, 'end')

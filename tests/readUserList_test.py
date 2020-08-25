@@ -30,9 +30,9 @@ def test_readUserList_ShouldBeEmptyListWhenFileNotExist():
 
     userList = readUserList(filePath)
     assert len(userList) == 0
-    
-    filePath.unlink()
 
+    filePath.unlink()
+    
 def test_readUserList_ShouldCreateUserListFileWhenFileNotExist():
     filePath = TEST_FILES_LOCATION / 'NON_EXISTANT_FILE.txt'
     assert not filePath.exists()
