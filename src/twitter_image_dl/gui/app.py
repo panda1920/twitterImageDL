@@ -16,7 +16,7 @@ class AppGUI:
 
     def _initializeWidgets(self):
         self._root = tk.Tk()
-        self._root.title('hello world')
+        self._root.title('twitter image dl')
         # self._root.geometry('400x600+50+50') # size, location of window on screen
         self._root.resizable(tk.FALSE, tk.FALSE)
         self._mainframe = ttk.Frame(self._root)

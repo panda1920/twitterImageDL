@@ -11,7 +11,8 @@ testdata/temp/
 *.conf
 
 # built files
-build/
+build/temp/
+build/spec/
 dist/
 *.spec
 
