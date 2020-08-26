@@ -79,8 +79,8 @@ jobs:
           name: Saving dependency cache
           key: v1-twitter-image-dl-windows-{{ checksum "./Pipfile.lock" }}
           paths:
-            - ".\.venv"
-            - "C:\tools\miniconda3\Lib\site-packages"
+            - .\.venv
+            - C:\tools\miniconda3\Lib\site-packages
 
   distribute:
     executor: python
@@ -94,9 +94,6 @@ jobs:
             dir .
             dir .\workspace
       # - s3/sync
-
-
-
 
 workflows:
   version: '2'
