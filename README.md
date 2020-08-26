@@ -6,13 +6,18 @@ No more repetitive right click-and-save!
 Intended to be used on Windows system.
 
 ## TODO
-- Setup CI/CD to automatically build/distribute executable
 - Brush up GUI
 - Add functionality to create/delete task scheduler entry
 - Adapt to new twitter APIv2.0
 - Create executable for other systems (maybe)
 
-## Building the app locally
+## Obtaining the app
+You may either (a) download the executable or (b) build the app yourself.
+
+### a) Download the app
+Download the app [here](https://twitter-image-dl.kamigama.dev).
+
+### b) Building the app locally
 #### Prerequisites
 - Since pyinstaller is not cross-platform, you must be on windows system
 - python >=3.7
@@ -45,3 +50,7 @@ From the settings page, fill out your twitter API related info and your desired 
 Make sure you hit the apply change button.  
 Place `users.txt` file in the save location you specified earlier.  
 Navigate back to main page and hit download button.
+
+#### Precautions
+Directory structure of the app is important.  
+Pulling files/folders out of its original location may cause the app to break.
