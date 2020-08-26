@@ -89,8 +89,6 @@ jobs:
           to: $S3_URL/twitter_image_dl.zip
           arguments: |
             --acl public read
-          overwrite: true
-
 workflows:
   version: '2'
   test-and-distribute:
