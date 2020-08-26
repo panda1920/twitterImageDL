@@ -4,6 +4,8 @@ executors:
   python:
     docker:
       - image: circleci/python:3.7
+        environment:
+          PIPENV_VENV_IN_PROJECT: 1
 
 jobs:
   test-app:
@@ -15,22 +17,27 @@ jobs:
           command: |
             sudo chown -R circleci:circleci /usr/local/bin
             sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+      - restore_cache:
+          name: 'Restoring cache'
+          keys:
+            - v1-twitter-image-dl-{{ checksum "./Pipfile.lock" }}
+            - v1-twitter-image-dl
       - run:
           name: Installing dependencies
           command: |
-            pip3 -V
-      # - restore_cache:
-      #     name: 'Restoring cache'
-      #     keys:
-      #       - v1-twitter-image-dl-{{ checksum "./Pipfile.lock" }}
-      #       - v1-twitter-image-dl
-      # - save_cache:
-      #     name: Saving dependency cache
-      #     key: v1-twitter-image-dl-{{ checksum "./Pipfile.lock" }}
-      #     paths:
-      #       - "./server/.venv"
-      #       - "/usr/local/bin"
-      #       - "/usr/local/bin/python3.7/site-packages"
+            pip install pipenv
+            pipenv install
+      - run:
+          name: Executing tests
+          command: |
+            pipenv run test
+      - save_cache:
+          name: Saving dependency cache
+          key: v1-twitter-image-dl-{{ checksum "./Pipfile.lock" }}
+          paths:
+            - "./server/.venv"
+            - "/usr/local/bin"
+            - "/usr/local/bin/python3.7/site-packages"
 
 workflows:
   version: '2'

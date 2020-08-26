@@ -5,10 +5,9 @@ verify_ssl = true
 
 [dev-packages]
 pyinstaller = "*"
+pytest = "*"
 
 [packages]
-beautifulsoup4 = "*"
-pytest = "*"
 
 [requires]
 python_version = "3.7"
