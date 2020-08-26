@@ -31,7 +31,7 @@ def restoreSysArgs():
     yield
     sys.argv = sysArgs
 
-@pytest.fixture(scope='function', autouse=True)
+@pytest.fixture(scope='function')
 def use_test_settings():
     test_settings = PROJECT_DIR / 'testdata' / 'settings' / constants.FILENAME_SETTINGS
     copied_settings = PROJECT_DIR / constants.FILENAME_SETTINGS
@@ -96,7 +96,7 @@ def test_dlmedaShouldNotCallDownloadMedia_whenAbortFlagIsSet(mock_bindings):
     assert len(mock_download_media.call_args_list) == 0
 
 @pytest.mark.flaky
-def test_dlMediaDownloads0ImagesWhenHistoryPresent():
+def test_dlMediaDownloads0ImagesWhenHistoryPresent(use_test_settings):
     userListFile = PROJECT_DIR / 'testdata' / 'userlists'/ 'me.txt'
     existingHistory = PROJECT_DIR / 'testdata' / 'history' / 'history_poopoopanda21.json'
 
@@ -113,7 +113,7 @@ def test_dlMediaDownloads0ImagesWhenHistoryPresent():
     assert Path(existingHistory).exists()
 
 @pytest.mark.flaky
-def test_dlMediaDownloads3Images():
+def test_dlMediaDownloads3Images(use_test_settings):
     userListFile = PROJECT_DIR / 'testdata' / 'userlists'/ 'me.txt'
 
     shutil.copyfile(userListFile, TEST_DL_LOCATION / constants.FILENAME_USERS)
