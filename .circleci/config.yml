@@ -50,18 +50,16 @@ jobs:
       PIPENV_VENV_IN_PROJECT: 1
     steps:
       - checkout
-      - restore_cache:
-          name: Restoring dependency cache
-          keys:
-            - v1-twitter-image-dl-windows-{{ checksum "./Pipfile.lock" }}
-            - v1-twitter-image-dl-windows-
+      # - restore_cache:
+      #     name: Restoring dependency cache
+      #     keys:
+      #       - v1-twitter-image-dl-windows-{{ checksum "./Pipfile.lock" }}
+      #       - v1-twitter-image-dl-windows-
       - run:
           name: Installing dependencies
           command: |
             pip install pipenv
             pipenv install -d
-      # - attach_workspace:
-      #     at: .\workspace
       - run:
           name: Building executable
           command: |
