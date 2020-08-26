@@ -11,10 +11,10 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Changing file permissiosn for later steps
-        command: |
-          sudo chown -R circleci:circleci /usr/local/bin
-          sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+          name: Changing file permissiosn for later steps
+          command: |
+            sudo chown -R circleci:circleci /usr/local/bin
+            sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
       - run:
           name: Installing dependencies
           command: |
