@@ -1,5 +1,8 @@
 version: '2.1'
 
+orbs:
+  windows: circleci/windows@2.4.0
+
 executors:
   python:
     docker:
@@ -40,8 +43,18 @@ jobs:
             - "/usr/local/bin"
             - "/usr/local/bin/python3.7/site-packages"
 
+  build:
+    executor: windows/default
+    steps:
+      - checkout
+      - run:
+          name:
+          command: |
+            .\build\build.bat
+
 workflows:
   version: '2'
   test-and-distribute:
     jobs:
-      - test-app
+      # - test-app
+      - build
