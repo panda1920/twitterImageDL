@@ -1,0 +1,39 @@
+version: '2.1'
+
+executors:
+  python:
+    docker:
+      - image: circleci/python:3.7
+
+jobs:
+  test-app:
+    executor: python
+    steps:
+      - checkout
+      - run:
+        name: Changing file permissiosn for later steps
+        command: |
+          sudo chown -R circleci:circleci /usr/local/bin
+          sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+      - run:
+          name: Installing dependencies
+          command: |
+            pip3 -V
+      # - restore_cache:
+      #     name: 'Restoring cache'
+      #     keys:
+      #       - v1-twitter-image-dl-{{ checksum "./Pipfile.lock" }}
+      #       - v1-twitter-image-dl
+      # - save_cache:
+      #     name: Saving dependency cache
+      #     key: v1-twitter-image-dl-{{ checksum "./Pipfile.lock" }}
+      #     paths:
+      #       - "./server/.venv"
+      #       - "/usr/local/bin"
+      #       - "/usr/local/bin/python3.7/site-packages"
+
+workflows:
+  version: '2'
+  test-and-distribute:
+    jobs:
+      - test-app

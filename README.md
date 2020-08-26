@@ -7,6 +7,8 @@ Intended to be used on Windows system.
 - Setup CI/CD to automatically build/distribute executable
 - Brush up GUI
 - Add functionality to create/delete task scheduler entry
+- Adapt to new twitter APIv2.0
+- Create executable for other systems (maybe)
 
 ## Building the app locally
 #### Prerequisites
@@ -15,18 +17,29 @@ Intended to be used on Windows system.
 - pipenv
 
 #### Instructions
-1. Install dependencies with command `pipenv install`
-2. Execute build script build/build.bat
+1. Clone this repo and cd into it
+2. Install dependencies with command `pipenv install`
+3. Execute build script build/build.bat
 
 Built files would be located at dist/gui and dist/twitter_image_dl.  
 twitter_image_dl.exe is a standalone executable that does download tasks only.
 
 ## Using the app
 #### Prerequisites
-- You must have access to twitter API
+- Access to twitter API
+- Only works for windows system
 
 #### Instructions
-Execute GUI.exe.  
+Create a file called `users.txt`.
+Fill out `users.txt` with usernames you wish to collect media files from in the following way:
+```
+username01
+username02
+username03
+```
+
+Execute gui.exe.  
 From the settings page, fill out your twitter API related info and your desired save location of media files.  
-Make sure you hit the apply change button.
-Back to main page and hit download button.
+Make sure you hit the apply change button.  
+Place `users.txt` file in the save location you specified earlier.  
+Navigate back to main page and hit download button.

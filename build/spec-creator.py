@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# creates a spec file so that multiple executables can share its dependencies
+# combines spec files so that multiple executables can share its dependencies
 # trying to avoid size bloat
 # https://pyinstaller.readthedocs.io/en/v3.3.1/spec-files.html#multipackage-bundles
 
@@ -7,9 +7,9 @@ from pathlib import Path
 import re
 
 SPECPATH = Path(__file__).resolve().parents[1] / 'build' / 'spec'
-SPECPATH_DL = SPECPATH / 'twitter_image_dl.spec'
-SPECPATH_GUI = SPECPATH / 'gui.spec'
-SPECPATH_BUILD = SPECPATH / 'build.spec'
+SPECFILE_DL = SPECPATH / 'twitter_image_dl.spec'
+SPECFILE_GUI = SPECPATH / 'gui.spec'
+SPECFILE_BUILD = SPECPATH / 'build.spec'
 SPECFILE_BEGINNING ="""# -*- mode: python ; coding: utf-8 -*-
 
 block_cipher = None
@@ -55,16 +55,16 @@ def rename_object(parsed_file, prefix):
 
     return [ analyze_clause, rest ]
 
-parsed_dl = parse_specfile(SPECPATH_DL)
-parsed_gui = parse_specfile(SPECPATH_GUI)
+parsed_dl = parse_specfile(SPECFILE_DL)
+parsed_gui = parse_specfile(SPECFILE_GUI)
 
 dl_prefix = 'dl_'
-renamed_dl = rename_object(parsed_dl, 'dl_')
+renamed_dl = rename_object(parsed_dl, dl_prefix)
 gui_prefix = 'gui_'
-renamed_gui = rename_object(parsed_gui, 'gui_')
+renamed_gui = rename_object(parsed_gui, gui_prefix)
 merge_clause = f'MERGE( ({gui_prefix}a, "gui", "gui"), ({dl_prefix}a, "dl", "twitter_image_dl") )\n'
 
-with SPECPATH_BUILD.open('w', encoding='utf-8') as f:
+with SPECFILE_BUILD.open('w', encoding='utf-8') as f:
     f.write(SPECFILE_BEGINNING)
     f.write(renamed_dl[0])
     f.write(renamed_gui[0])
