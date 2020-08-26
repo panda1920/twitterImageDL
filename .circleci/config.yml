@@ -30,6 +30,7 @@ jobs:
       - run:
           name: Executing tests
           command: |
+            mkdir ./testdata/download
             pipenv run test
       - save_cache:
           name: Saving dependency cache
