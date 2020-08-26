@@ -45,6 +45,8 @@ jobs:
 
   build:
     executor: windows/default
+    environment:
+      PIPENV_VENV_IN_PROJECT: 1
     steps:
       - checkout
       - run:
@@ -56,6 +58,17 @@ jobs:
           name: Building executable
           command: |
             .\build\build.bat
+      - run:
+          name: Creating archive of built files
+          command: |
+            gci :env
+      # - save_cache:
+      #   name: Saving dependency cache
+      #   key: v1-twitter-image-dl-windows-{{ checksum "./Pipfile.lock" }}
+      #   paths:
+      #     - ".\.venv"
+      #     - "C:\Users\"
+      #     - "/usr/local/bin/python3.7/site-packages"
 
 workflows:
   version: '2'
