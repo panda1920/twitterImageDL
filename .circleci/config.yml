@@ -48,7 +48,12 @@ jobs:
     steps:
       - checkout
       - run:
-          name:
+          name: Installing dependencies
+          command: |
+            pip install pipenv
+            pipenv install -d
+      - run:
+          name: Building executable
           command: |
             .\build\build.bat
 
