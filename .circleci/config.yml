@@ -61,14 +61,15 @@ jobs:
       - run:
           name: Creating archive of built files
           command: |
-            gci :env
+            gci env:
+            cd ${env:LOCALAPPDATA}\Programs\Python\Python37\Lib\site-packages
+            ls
       # - save_cache:
       #   name: Saving dependency cache
       #   key: v1-twitter-image-dl-windows-{{ checksum "./Pipfile.lock" }}
       #   paths:
-      #     - ".\.venv"
-      #     - "C:\Users\"
-      #     - "/usr/local/bin/python3.7/site-packages"
+          # - ".\.venv"
+          # - "C:\Users\\AppData\Local\Programs\Python\Python37\Lib\site-packages"
 
 workflows:
   version: '2'
