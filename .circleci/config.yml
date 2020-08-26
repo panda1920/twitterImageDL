@@ -35,7 +35,7 @@ jobs:
           name: Saving dependency cache
           key: v1-twitter-image-dl-{{ checksum "./Pipfile.lock" }}
           paths:
-            - "./server/.venv"
+            - "./.venv"
             - "/usr/local/bin"
             - "/usr/local/bin/python3.7/site-packages"
 
