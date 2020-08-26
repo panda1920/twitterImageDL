@@ -1,3 +1,5 @@
+[![panda1920](https://circleci.com/gh/panda1920/twitterImageDL.svg?style=shield)](https://app.circleci.com/pipelines/github/panda1920/twitterImageDL)
+
 ## Project overview
 This simple python application allows easy collection of media files on twitter.  
 No more repetitive right click-and-save!  
