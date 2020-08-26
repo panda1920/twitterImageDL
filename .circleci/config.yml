@@ -2,6 +2,7 @@ version: '2.1'
 
 orbs:
   windows: circleci/windows@2.4.0
+  s3: circleci/aws-s3@1.0.16
 
 executors:
   python:
@@ -49,30 +50,53 @@ jobs:
       PIPENV_VENV_IN_PROJECT: 1
     steps:
       - checkout
-      # - restore_cache:
-      #     name: Restoring dependency cache
-      #     keys:
-      #       - v1-twitter-image-dl-windows-{{ checksum "./Pipfile.lock" }}
-      #       - v1-twitter-image-dl-windows-
+      - restore_cache:
+          name: Restoring dependency cache
+          keys:
+            - v1-twitter-image-dl-windows-{{ checksum "./Pipfile.lock" }}
+            - v1-twitter-image-dl-windows-
       - run:
           name: Installing dependencies
           command: |
             pip install pipenv
             pipenv install -d
-      # - run:
-      #     name: Building executable
-      #     command: |
-      #       .\build\build.bat
+      # - attach_workspace:
+      #     at: .\workspace
+      - run:
+          name: Building executable
+          command: |
+            .\build\build.bat
       - run:
           name: Creating archive of built files
           command: |
-            dir C:\tools\miniconda3\Lib\site-packages
-      # - save_cache:
-      #   name: Saving dependency cache
-      #   key: v1-twitter-image-dl-windows-{{ checksum "./Pipfile.lock" }}
-      #   paths:
-          # - ".\.venv"
-          # - "C:\tools\miniconda3\Lib\site-packages"
+            Compress-Archive -Path .\dist\gui, .\dist\twitter_image_dl -DestinationPath .\twitter_image_dl.zip
+            dir .
+      - persist_to_workspace:
+          root: .
+          paths:
+            - twitter_image_dl.zip
+      - save_cache:
+          name: Saving dependency cache
+          key: v1-twitter-image-dl-windows-{{ checksum "./Pipfile.lock" }}
+          paths:
+            - ".\.venv"
+            - "C:\tools\miniconda3\Lib\site-packages"
+
+  distribute:
+    executor: python
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .\workspace
+      - run:
+          name: making sure I have the files that I need
+          command: |
+            dir .
+            dir .\workspace
+      # - s3/sync
+
+
+
 
 workflows:
   version: '2'
@@ -80,3 +104,7 @@ workflows:
     jobs:
       # - test-app
       - build
+      - distribute:
+          requires:
+            - build
+          context: AWS
