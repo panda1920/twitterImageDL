@@ -12,6 +12,8 @@ class AppGUI:
     def __init__(self, bindings):
         self._bindings = bindings
         self._initializeWidgets()
+        self._bind_callbacks()
+        self._main.lift()
         self._root.update()
 
     def _initializeWidgets(self):
@@ -27,6 +29,10 @@ class AppGUI:
         
         self._settings = SettingsPage(self._bindings, self._mainframe)
         self._settings.grid(row=0, column=0, sticky='nsew')
+
+    def _bind_callbacks(self):
+        self._main.set_settings_callback(lambda: self._settings.lift())
+        self._settings.set_close_callback(lambda: self._main.lift())
 
     def start(self):
         self._root.mainloop()

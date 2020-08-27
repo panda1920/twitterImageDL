@@ -10,6 +10,12 @@ class SettingSelection(ttk.Frame):
         self._bindings = bindings
         self._initializeWidgets(selections)
 
+    def select(self, index):
+        self._list.selection_clear(0, 'end')
+        self._list.selection_set(index)
+        self._list.activate(index)
+        self._list.event_generate('<<ListboxSelect>>')
+
     def _initializeWidgets(self, selections):
         self._selections = tk.StringVar(value=selections)
         self._list = tk.Listbox(self, selectmode='single', listvariable=self._selections)
