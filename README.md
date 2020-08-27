@@ -5,11 +5,9 @@ This simple python application allows easy collection of media files on twitter.
 No more repetitive right click-and-save!  
 Intended to be used on Windows system.
 
-## TODO
-- Brush up GUI
-- Add functionality to create/delete task scheduler entry
-- Adapt to new twitter APIv2.0
-- Create executable for other systems (maybe)
+## Features
+- Automates download of images/videos/gifs based on a list of users
+- Simple GUI which requires no knowledge of python/programming to use
 
 ## Obtaining the app
 You may either (a) download the executable or (b) build the app yourself.
@@ -28,7 +26,7 @@ Download the app [here](https://twitter-image-dl.kamigama.dev).
 2. Install dependencies with command `pipenv install`
 3. Execute build script build/build.bat
 
-Built files would be located at dist/gui and dist/twitter_image_dl.  
+Built files would be located dist/twitter_image_dl.  
 twitter_image_dl.exe is a standalone executable that does download tasks only.
 
 ## Using the app
@@ -38,7 +36,7 @@ twitter_image_dl.exe is a standalone executable that does download tasks only.
 
 #### Instructions
 Create a file called `users.txt`.
-Fill out `users.txt` with usernames you wish to collect media files from in the following way:
+List out twitter usernames you wish to collect media files from in `users.txt`:
 ```
 username01
 username02
@@ -54,3 +52,19 @@ Navigate back to main page and hit download button.
 #### Precautions
 Directory structure of the app is important.  
 Pulling files/folders out of its original location may cause the app to break.
+
+## TODO checklist
+- [x] Properly generate twitter API authorization header
+- [x] Implement basic download capability
+- [x] Rewrite code to utilize multithreading because download is slow
+- [x] Implement mechanism to prevent excessive API calls by keeping track of download history
+- [x] Replace environment variables with textfile for app configuration
+- [x] Implement a class that create/delete task scheduler entry
+- [x] Setup a GUI to consolidate all functionality in one place
+- [x] Convert the entire app into windows executable to make it distributable
+- [x] Set up CI/CD to automate test/build/distribution of app
+- [ ] Brush up GUI
+- [ ] Better logging and message output
+- [ ] Integrate task scheduler functionality to the GUI
+- [ ] Adapt to new twitter APIv2.0
+- [ ] Create executable for other systems (maybe)

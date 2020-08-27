@@ -68,7 +68,7 @@ jobs:
           name: Creating archive of built files
           command: |
             $ProgressPreference = "SilentlyContinue"
-            Compress-Archive -Path .\dist\gui, .\dist\twitter_image_dl -DestinationPath .\twitter_image_dl.zip
+            Compress-Archive -Path .\dist\twitter_image_dl -DestinationPath .\twitter_image_dl.zip
       - persist_to_workspace:
           root: .
           paths:
