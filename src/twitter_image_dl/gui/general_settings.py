@@ -58,9 +58,12 @@ class GeneralSettings(ttk.Frame):
         self._apply_button.configure(command=self._write_widget_values)
 
     def _save_in_handler(self):
-        path = Path( filedialog.askdirectory(mustexist=True) )
+        new_save_location = filedialog.askdirectory(mustexist=True)
+        if new_save_location == '':
+            return
+        
         self._inputs['save location']['entry'].delete(0, 'end')
-        self._inputs['save location']['entry'].insert(0, path)
+        self._inputs['save location']['entry'].insert(0, Path(new_save_location))
         self._apply_button.configure(state='active')
 
     def _write_widget_values(self):
