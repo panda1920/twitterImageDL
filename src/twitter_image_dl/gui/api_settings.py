@@ -15,7 +15,7 @@ class APISettings(ttk.Frame):
 
     def _initializeWidgets(self):
         self._create_widgets()
-        self._set_widget_positions()
+        self._set_widget_geometry()
         self._bind_callbacks()
         self._load_input_values()
 
@@ -44,7 +44,7 @@ class APISettings(ttk.Frame):
         }
         self._apply_button = ttk.Button(self, text='Apply change', state='disabled')
 
-    def _set_widget_positions(self):
+    def _set_widget_geometry(self):
         for idx, input in enumerate( self._inputs.values() ):
             input['label'].grid(column=0, row=idx, sticky='w')
             input['entry'].grid(column=1, row=idx, sticky='we')

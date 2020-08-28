@@ -16,6 +16,9 @@ class SettingSelection(ttk.Frame):
         self._list.activate(index)
         self._list.event_generate('<<ListboxSelect>>')
 
+    def set_selection_callback(self, callback):
+        self._selection_callback = callback
+
     def _initializeWidgets(self, selections):
         self._selections = tk.StringVar(value=selections)
         self._list = tk.Listbox(self, selectmode='single', listvariable=self._selections)
@@ -28,6 +31,3 @@ class SettingSelection(ttk.Frame):
         selection = self._list.get( self._list.curselection() )
         if self._selection_callback:
             self._selection_callback(selection)
-
-    def set_selection_callback(self, callback):
-        self._selection_callback = callback

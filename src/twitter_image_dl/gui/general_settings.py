@@ -1,5 +1,6 @@
+from pathlib import Path
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, filedialog
 
 import twitter_image_dl.global_constants as constants
 
@@ -15,7 +16,7 @@ class GeneralSettings(ttk.Frame):
         
     def _initializeWidgets(self):
         self._create_widgets()
-        self._set_widget_positions()
+        self._set_widget_geometry()
         self._bind_callbacks()
         self._load_input_values()
 
@@ -27,15 +28,18 @@ class GeneralSettings(ttk.Frame):
                 'key': constants.SAVE_LOCATION,
             },
         }
+        self._save_in_button = ttk.Button(self, text='Save in')
         self._apply_button = ttk.Button(self, text='Apply change', state='disabled')
 
-    def _set_widget_positions(self):
+    def _set_widget_geometry(self):
         for idx, input in enumerate( self._inputs.values() ):
             input['label'].grid(column=0, row=idx, sticky='w')
             input['entry'].grid(column=1, row=idx, sticky='we')
-        self._apply_button.grid(row=2, column=1, sticky='e')
+        self._save_in_button.grid(row=0, column=2, sticky='we')
+        self._apply_button.grid(row=2, column=2, sticky='we')
         
         self.columnconfigure(1, weight=1)
+        self.columnconfigure(2, weight=0)
 
     def _load_input_values(self):
         settings = self._bindings.get_settings().get()
@@ -50,8 +54,14 @@ class GeneralSettings(ttk.Frame):
             input['entry'].bind('<Key>', lambda e:
                 self._apply_button.configure(state='active')
             )
-
+        self._save_in_button.configure(command=self._save_in_handler)
         self._apply_button.configure(command=self._write_widget_values)
+
+    def _save_in_handler(self):
+        path = Path( filedialog.askdirectory(mustexist=True) )
+        self._inputs['save location']['entry'].delete(0, 'end')
+        self._inputs['save location']['entry'].insert(0, path)
+        self._apply_button.configure(state='active')
 
     def _write_widget_values(self):
         new_settings = { constants.GENERAL_SECTION: {} }

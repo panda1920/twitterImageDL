@@ -14,7 +14,6 @@ class SettingsPage(ttk.Frame):
         super().__init__(master, **config)
         self._bindings = bindings
         self._initializeWidgets()
-        self._bind_callbacks()
 
     def lift(self, *args):
         super().lift(*args)
@@ -25,7 +24,7 @@ class SettingsPage(ttk.Frame):
 
     def _initializeWidgets(self):
         self._create_widgets()
-        self._set_widget_positions()
+        self._set_widget_geometry()
         self._bind_callbacks()
 
     def _create_widgets(self):
@@ -37,7 +36,7 @@ class SettingsPage(ttk.Frame):
             [constants.GENERAL_SECTION, constants.API_SECTION]
         )
 
-    def _set_widget_positions(self):
+    def _set_widget_geometry(self):
         self._label.grid(row=0, column=0, columnspan=2)
         self._general_settings.grid(row=1, column=1, sticky='nsew')
         self._api_settings.grid(row=1, column=1, sticky='nsew')

@@ -13,7 +13,7 @@ class MainPage(ttk.Frame):
     def __init__(self, bindings, master, **configs):
         super().__init__(master, **configs)
         self._bindings = bindings
-        self._thread = None
+        self._task_thread = None
         self._initializeWidgets()
         self._bind_callbacks()
 
@@ -43,8 +43,8 @@ class MainPage(ttk.Frame):
             self._settings_callback()
 
     def _start_download_background(self):
-        if self._thread is not None and self._thread.is_alive():
+        if self._task_thread is not None and self._task_thread.is_alive():
             return
 
-        self._thread = Thread(target=dlmedia, args=[self._bindings])
-        self._thread.start()
+        self._task_thread = Thread(target=dlmedia, args=[self._bindings])
+        self._task_thread.start()
