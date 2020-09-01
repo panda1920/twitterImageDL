@@ -28,8 +28,7 @@ class SettingsPage(ttk.Frame):
         self._bind_callbacks()
 
     def _create_widgets(self):
-        self._label = ttk.Label(self, text='settings page')
-        self._close_button = ttk.Button(self, text='close')
+        self._close_button = ttk.Button(self, text='Close')
         self._general_settings = GeneralSettings(self._bindings, self)
         self._api_settings = APISettings(self._bindings, self)
         self._selections = SettingSelection(self._bindings, self,
@@ -37,15 +36,14 @@ class SettingsPage(ttk.Frame):
         )
 
     def _set_widget_geometry(self):
-        self._label.grid(row=0, column=0, columnspan=2)
-        self._general_settings.grid(row=1, column=1, sticky='nsew')
-        self._api_settings.grid(row=1, column=1, sticky='nsew')
-        self._selections.grid(row=1, column=0, sticky='nsew', rowspan=2)
-        self._close_button.grid(row=2, column=1, sticky='sew')
+        self._general_settings.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
+        self._api_settings.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
+        self._selections.grid(row=0, column=0, sticky='nsew', rowspan=2)
+        self._close_button.grid(row=1, column=1, sticky='sew')
         
         self.columnconfigure(1, weight=1)
+        self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
-        self.rowconfigure(2, weight=1)
 
     def _bind_callbacks(self):
         self._close_button.configure(command=self._close_handler)

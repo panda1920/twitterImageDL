@@ -27,6 +27,13 @@ class SettingSelection(ttk.Frame):
         self.rowconfigure(0, weight=1)
         self._list.bind('<<ListboxSelect>>', self._select_handler)
 
+        # set styles
+        for i in range(len(selections)):
+            if i % 2 == 1:
+                self._list.itemconfigure(i, background='#e0e0e0')
+
+        self._list.configure(activestyle='none')
+
     def _select_handler(self, event):
         selection = self._list.get( self._list.curselection() )
         if self._selection_callback:

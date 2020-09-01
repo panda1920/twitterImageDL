@@ -15,16 +15,21 @@ class MainPage(ttk.Frame):
         self._bindings = bindings
         self._task_thread = None
         self._initializeWidgets()
-        self._bind_callbacks()
 
     def set_settings_callback(self, callback):
         self._settings_callback = callback
 
     def _initializeWidgets(self):
+        self._create_widgets()
+        self._set_widget_geometry()
+        self._bind_callbacks()
+
+    def _create_widgets(self):
         self._start_button = ttk.Button(self, text='download')
         self._settings_button = ttk.Button(self, text='settings')
         self._terminal = TerminalOutput(self._bindings, self)
 
+    def _set_widget_geometry(self):
         self._start_button.grid(row=0, column=0, sticky='ew')
         self._settings_button.grid(row=0, column=1, sticky='ew')
         self._terminal.grid(row=1, column=0, sticky='nsew', columnspan=2)
