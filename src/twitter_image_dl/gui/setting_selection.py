@@ -32,7 +32,10 @@ class SettingSelection(ttk.Frame):
             if i % 2 == 1:
                 self._list.itemconfigure(i, background='#e0e0e0')
 
-        self._list.configure(activestyle='none')
+        self._list.configure(activestyle='none', highlightthickness=0)
+        self._list.bind('<Tab>', lambda *args: 'break') # don't want the widget to respond to tab
+
+        print( self._list.configure().keys() )
 
     def _select_handler(self, event):
         selection = self._list.get( self._list.curselection() )
