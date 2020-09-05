@@ -12,11 +12,13 @@ TASKNAME = 'twitter_image_dl.dltask'
 
 # Defines string identifiers that should be found in settings file
 
-GENERAL_SECTION = 'general settings'
+GENERAL_SECTION = 'General'
 SAVE_LOCATION = 'save_location'
 
-API_SECTION = 'twitter API'
+API_SECTION = 'Twitter API'
 ACCESS_TOKEN = 'access_token'
 ACCESS_SECRET = 'access_secret'
 CONSUMER_KEY = 'consumer_key'
 CONSUMER_SECRET = 'consumer_secret'
+
+SCHEDULE_SECTION = 'Schedule'

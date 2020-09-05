@@ -3,6 +3,7 @@ from tkinter import ttk
 
 from twitter_image_dl.gui.general_settings import GeneralSettings
 from twitter_image_dl.gui.api_settings import APISettings
+from twitter_image_dl.gui.schedule_settings import ScheduleSettings
 from twitter_image_dl.gui.setting_selection import SettingSelection
 import twitter_image_dl.global_constants as constants
 
@@ -30,14 +31,20 @@ class SettingsPage(ttk.Frame):
     def _create_widgets(self):
         self._close_button = ttk.Button(self, text='Close')
         self._general_settings = GeneralSettings(self._bindings, self)
+        self._schedule_settings = ScheduleSettings(self._bindings, self)
         self._api_settings = APISettings(self._bindings, self)
         self._selections = SettingSelection(self._bindings, self,
-            [constants.GENERAL_SECTION, constants.API_SECTION]
+            [
+                constants.GENERAL_SECTION,
+                constants.API_SECTION,
+                constants.SCHEDULE_SECTION,
+            ]
         )
 
     def _set_widget_geometry(self):
         self._general_settings.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
         self._api_settings.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
+        self._schedule_settings.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
         self._selections.grid(row=0, column=0, sticky='nsew', rowspan=2)
         self._close_button.grid(row=1, column=1, sticky='sew')
         
@@ -58,3 +65,5 @@ class SettingsPage(ttk.Frame):
             self._general_settings.lift()
         if selection == constants.API_SECTION:
             self._api_settings.lift()
+        if selection == constants.SCHEDULE_SECTION:
+            self._schedule_settings.lift()

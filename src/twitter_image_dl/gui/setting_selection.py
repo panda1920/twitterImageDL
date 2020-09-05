@@ -35,8 +35,6 @@ class SettingSelection(ttk.Frame):
         self._list.configure(activestyle='none', highlightthickness=0)
         self._list.bind('<Tab>', lambda *args: 'break') # don't want the widget to respond to tab
 
-        print( self._list.configure().keys() )
-
     def _select_handler(self, event):
         selection = self._list.get( self._list.curselection() )
         if self._selection_callback:

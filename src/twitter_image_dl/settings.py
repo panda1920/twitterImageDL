@@ -40,7 +40,7 @@ class Settings:
             self._settings[constants.API_SECTION][constants.CONSUMER_KEY] == '' or
             self._settings[constants.API_SECTION][constants.CONSUMER_SECRET] == ''
         ):
-            raise exceptions.APINotFound('Please make sure to fill out twitter API related options in settings')
+            raise exceptions.APINotFound('Please make sure to fill out Twitter API related options in settings')
         if (
             not Path(self._settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION]).exists()
         ):
