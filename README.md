@@ -43,7 +43,7 @@ username02
 username03
 ```
 
-Execute gui.exe.  
+Execute `gui.exe`.  
 From the settings page, fill out your twitter API related info and your desired save location of media files.  
 Make sure you hit the apply change button.  
 Place `users.txt` file in the save location you specified earlier.  
