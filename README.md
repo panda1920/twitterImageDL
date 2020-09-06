@@ -29,7 +29,7 @@ Download the app [here](https://twitter-image-dl.kamigama.dev).
 Built files would be located dist/twitter_image_dl.  
 twitter_image_dl.exe is a standalone executable that does download tasks only.
 
-## Using the app
+## Usage
 #### Prerequisites
 - Access to twitter API
 - Only works for windows system

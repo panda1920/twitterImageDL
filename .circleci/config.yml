@@ -94,8 +94,13 @@ workflows:
   version: '2'
   test-and-distribute:
     jobs:
-      - test-app
-      - build
+      - test-app:
+        filters:
+          branches:
+            only: master
+      - build:
+          requires:
+            - test-app
       - distribute:
           requires:
             - build
