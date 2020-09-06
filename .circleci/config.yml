@@ -95,9 +95,9 @@ workflows:
   test-and-distribute:
     jobs:
       - test-app:
-        filters:
-          branches:
-            only: master
+          filters:
+            branches:
+              only: master
       - build:
           requires:
             - test-app
