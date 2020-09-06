@@ -6,3 +6,9 @@ access_token=test_access_token
 access_secret=test_access_secret
 consumer_key=test_consumer_key
 consumer_secret=test_consumer_secret
+
+[Schedule]
+is_scheduled=1
+schedule_period=1
+start_hour=1
+start_minute=1

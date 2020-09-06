@@ -1,2 +1,8 @@
 [General]
 save_location=C:\Users\user1\dir1\dir\dir3
+
+[Schedule]
+is_scheduled=1
+schedule_period=1
+start_hour=1
+start_minute=1

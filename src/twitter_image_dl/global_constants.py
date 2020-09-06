@@ -22,3 +22,7 @@ CONSUMER_KEY = 'consumer_key'
 CONSUMER_SECRET = 'consumer_secret'
 
 SCHEDULE_SECTION = 'Schedule'
+IS_SCHEDULED = 'is_scheduled'
+SCHEDULE_PERIOD = 'schedule_period'
+START_HOUR = 'start_hour'
+START_MINUTE = 'start_minute'

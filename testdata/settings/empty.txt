@@ -6,3 +6,9 @@ access_token=
 access_secret=
 consumer_key=
 consumer_secret=
+
+[Schedule]
+is_scheduled=
+schedule_period=
+start_hour=
+start_minute=
