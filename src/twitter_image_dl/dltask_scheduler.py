@@ -6,10 +6,10 @@ import twitter_image_dl.global_constants as constants
 
 class DltaskScheduler:
     class ScheduleOptions(Enum):
-        MINUTE = 1
-        HOURLY = 2
-        DAILY  = 3
-        WEEKLY = 4
+        MINUTE = 0
+        HOURLY = 1
+        DAILY  = 2
+        WEEKLY = 3
     TASKNAME = constants.TASKNAME
 
     def __init__(self, app_path):
