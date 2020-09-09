@@ -15,10 +15,14 @@ class DltaskScheduler:
     def __init__(self, app_path):
         self._taskpath = app_path / constants.FILENAME_DL
 
-    def register(self, schedule: ScheduleOptions):
+    def register(self, schedule: ScheduleOptions, options = None):
+        if options is None:
+            options = {}
+        
         self._schedule_task('/Create',
             '/TR', str(self._taskpath),
             '/SC', schedule.name,
+            *self._create_starttime_args(options)
         )
 
     def deregister(self):
@@ -31,3 +35,11 @@ class DltaskScheduler:
             stdout=subprocess.DEVNULL,
             stderr=subprocess.STDOUT,
         )
+
+    def _create_starttime_args(self, options):
+        if constants.START_HOUR not in options:
+            return []
+
+        hour = options.get(constants.START_HOUR, 0)
+        minute = options.get(constants.START_MINUTE, 0)
+        return ['/ST', f'{hour:02}:{minute:02}']
