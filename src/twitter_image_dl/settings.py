@@ -37,11 +37,11 @@ def schedule_to_string(schedule):
     return str(schedule.value)
 
 def string_to_schedule(string):
-    return DltaskScheduler.ScheduleOptions(int(string))
+    return DltaskScheduler.SchedulePeriods(int(string))
 
 # convert schedule enums to underlying integer values
 schedule_values = [
-    member.value for member in DltaskScheduler.ScheduleOptions.__members__.values()
+    member.value for member in DltaskScheduler.SchedulePeriods.__members__.values()
 ]
 
 class Settings:

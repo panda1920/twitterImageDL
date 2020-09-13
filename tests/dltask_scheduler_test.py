@@ -15,7 +15,7 @@ class Test_CallsToSubprocess:
     def test_registerShouldCallCreate(self, tmp_path, mocked_subprocess):
         scheduler = DltaskScheduler(tmp_path)
         
-        scheduler.register(DltaskScheduler.ScheduleOptions.HOURLY)
+        scheduler.register(DltaskScheduler.SchedulePeriods.HOURLY)
 
         assert len(mocked_subprocess.run.call_args_list) == 1
         # test args passed to subprocess.run()
@@ -41,11 +41,11 @@ class Test_CallsToSubprocess:
             constants.START_MINUTE: minute,
         }
 
-        scheduler.register(DltaskScheduler.ScheduleOptions.DAILY, options)
+        scheduler.register(DltaskScheduler.SchedulePeriods.DAILY, options)
 
         args, *_ = mocked_subprocess.run.call_args_list[0][0]
-        taskstart_position = args.index('/ST') + 1
-        assert args[taskstart_position] == f'{hour}:{minute}'
+        starttime_position = args.index('/ST') + 1
+        assert args[starttime_position] == f'{hour}:{minute}'
 
     def test_starttimeShouldBeZeroPadded(self, tmp_path, mocked_subprocess):
         scheduler = DltaskScheduler(tmp_path)
@@ -56,17 +56,17 @@ class Test_CallsToSubprocess:
             constants.START_MINUTE: minute,
         }
 
-        scheduler.register(DltaskScheduler.ScheduleOptions.DAILY, options)
+        scheduler.register(DltaskScheduler.SchedulePeriods.DAILY, options)
 
         args, *_ = mocked_subprocess.run.call_args_list[0][0]
-        taskstart_position = args.index('/ST') + 1
-        assert args[taskstart_position] == '01:00'
+        starttime_position = args.index('/ST') + 1
+        assert args[starttime_position] == '01:00'
 
     def test_starttimeShouldNotBeSpecifiedWhenNotInOption(self, tmp_path, mocked_subprocess):
         scheduler = DltaskScheduler(tmp_path)
         options = {}
 
-        scheduler.register(DltaskScheduler.ScheduleOptions.DAILY, options)
+        scheduler.register(DltaskScheduler.SchedulePeriods.DAILY, options)
 
         args, *_ = mocked_subprocess.run.call_args_list[0][0]
         assert '/ST' not in args

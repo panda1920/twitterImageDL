@@ -5,7 +5,7 @@ import subprocess
 import twitter_image_dl.global_constants as constants
 
 class DltaskScheduler:
-    class ScheduleOptions(Enum):
+    class SchedulePeriods(Enum):
         MINUTE = 0
         HOURLY = 1
         DAILY  = 2
@@ -15,7 +15,7 @@ class DltaskScheduler:
     def __init__(self, app_path):
         self._taskpath = app_path / constants.FILENAME_DL
 
-    def register(self, schedule: ScheduleOptions, options = None):
+    def register(self, schedule: SchedulePeriods, options = None):
         if options is None:
             options = {}
         

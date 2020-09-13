@@ -34,7 +34,7 @@ class Test_readSettings:
         assert settings[constants.API_SECTION][constants.CONSUMER_SECRET] == 'test_consumer_secret'
 
         assert settings[constants.SCHEDULE_SECTION][constants.IS_SCHEDULED] == True
-        assert settings[constants.SCHEDULE_SECTION][constants.SCHEDULE_PERIOD] == DltaskScheduler.ScheduleOptions.HOURLY
+        assert settings[constants.SCHEDULE_SECTION][constants.SCHEDULE_PERIOD] == DltaskScheduler.SchedulePeriods.HOURLY
         assert settings[constants.SCHEDULE_SECTION][constants.START_HOUR] == 1
         assert settings[constants.SCHEDULE_SECTION][constants.START_MINUTE] == 1
 
@@ -51,7 +51,7 @@ class Test_readSettings:
         assert settings[constants.API_SECTION][constants.CONSUMER_SECRET] == 'test_consumer_secret'
 
         assert settings[constants.SCHEDULE_SECTION][constants.IS_SCHEDULED] == True
-        assert settings[constants.SCHEDULE_SECTION][constants.SCHEDULE_PERIOD] == DltaskScheduler.ScheduleOptions.HOURLY
+        assert settings[constants.SCHEDULE_SECTION][constants.SCHEDULE_PERIOD] == DltaskScheduler.SchedulePeriods.HOURLY
         assert settings[constants.SCHEDULE_SECTION][constants.START_HOUR] == 1
         assert settings[constants.SCHEDULE_SECTION][constants.START_MINUTE] == 1
 
@@ -80,7 +80,7 @@ class Test_readSettings:
         settings = Settings(no_schedule_section).get()
 
         assert settings[constants.SCHEDULE_SECTION][constants.IS_SCHEDULED] == False
-        assert settings[constants.SCHEDULE_SECTION][constants.SCHEDULE_PERIOD] == DltaskScheduler.ScheduleOptions.MINUTE
+        assert settings[constants.SCHEDULE_SECTION][constants.SCHEDULE_PERIOD] == DltaskScheduler.SchedulePeriods.MINUTE
         assert settings[constants.SCHEDULE_SECTION][constants.START_HOUR] == 0
         assert settings[constants.SCHEDULE_SECTION][constants.START_MINUTE] == 0
 
@@ -98,7 +98,7 @@ class Test_readSettings:
         assert settings[constants.API_SECTION][constants.CONSUMER_SECRET] == ''
 
         assert settings[constants.SCHEDULE_SECTION][constants.IS_SCHEDULED] == False
-        assert settings[constants.SCHEDULE_SECTION][constants.SCHEDULE_PERIOD] == DltaskScheduler.ScheduleOptions.MINUTE
+        assert settings[constants.SCHEDULE_SECTION][constants.SCHEDULE_PERIOD] == DltaskScheduler.SchedulePeriods.MINUTE
         assert settings[constants.SCHEDULE_SECTION][constants.START_HOUR] == 0
         assert settings[constants.SCHEDULE_SECTION][constants.START_MINUTE] == 0
 
@@ -116,7 +116,7 @@ class Test_readSettings:
         assert settings[constants.API_SECTION][constants.CONSUMER_SECRET] == ''
 
         assert settings[constants.SCHEDULE_SECTION][constants.IS_SCHEDULED] == False
-        assert settings[constants.SCHEDULE_SECTION][constants.SCHEDULE_PERIOD] == DltaskScheduler.ScheduleOptions.MINUTE
+        assert settings[constants.SCHEDULE_SECTION][constants.SCHEDULE_PERIOD] == DltaskScheduler.SchedulePeriods.MINUTE
         assert settings[constants.SCHEDULE_SECTION][constants.START_HOUR] == 0
         assert settings[constants.SCHEDULE_SECTION][constants.START_MINUTE] == 0
 
@@ -147,10 +147,10 @@ class Test_readSettings:
     def test_shouldGenerateDefaultValue_whenSchedulePeriodIsInvalid(self):
         valid_values = [
             member for member
-            in DltaskScheduler.ScheduleOptions.__members__.values()
+            in DltaskScheduler.SchedulePeriods.__members__.values()
         ]
         invalid_values = [-1, 4, -9999, 9999, 'some_string']
-        default_value = DltaskScheduler.ScheduleOptions.MINUTE
+        default_value = DltaskScheduler.SchedulePeriods.MINUTE
 
         for valid_value in valid_values:
             self.create_test_settings_file({
@@ -247,7 +247,7 @@ class Test_writeSettings:
             },
             constants.SCHEDULE_SECTION: {
                 constants.IS_SCHEDULED: True,
-                constants.SCHEDULE_PERIOD: DltaskScheduler.ScheduleOptions.HOURLY,
+                constants.SCHEDULE_PERIOD: DltaskScheduler.SchedulePeriods.HOURLY,
                 constants.START_HOUR: 1,
                 constants.START_MINUTE: 1,
             },
@@ -276,7 +276,7 @@ class Test_writeSettings:
             },
             constants.SCHEDULE_SECTION: {
                 constants.IS_SCHEDULED: True,
-                constants.SCHEDULE_PERIOD: DltaskScheduler.ScheduleOptions.HOURLY,
+                constants.SCHEDULE_PERIOD: DltaskScheduler.SchedulePeriods.HOURLY,
                 constants.START_HOUR: 1,
                 constants.START_MINUTE: 1,
             },
