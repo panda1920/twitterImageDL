@@ -1,5 +1,4 @@
 [![panda1920](https://circleci.com/gh/panda1920/twitterImageDL.svg?style=shield)](https://app.circleci.com/pipelines/github/panda1920/twitterImageDL)
-
 ## Project overview
 This simple python application allows easy collection of media files on twitter.  
 No more repetitive right click-and-save!  
@@ -7,12 +6,12 @@ Intended to be used on Windows system.
 
 ## Features
 - Automates download of images/videos/gifs based on a list of users
-- Simple GUI which requires no knowledge of python/programming to use
+- Simple to use GUI which requires no knowledge of python/programming
 
 ## Obtaining the app
 You may either (a) download the executable or (b) build the app yourself.
 
-### a) Download the app
+### a) Download
 Download the app [here](https://twitter-image-dl.kamigama.dev).
 
 ### b) Building the app locally
@@ -43,7 +42,7 @@ username02
 username03
 ```
 
-Execute gui.exe.  
+Execute `gui.exe`.  
 From the settings page, fill out your twitter API related info and your desired save location of media files.  
 Make sure you hit the apply change button.  
 Place `users.txt` file in the save location you specified earlier.  

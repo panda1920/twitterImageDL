@@ -4,30 +4,64 @@ from copy import deepcopy
 
 import twitter_image_dl.global_constants as constants
 import twitter_image_dl.exceptions as exceptions
+from twitter_image_dl.dltask_scheduler import DltaskScheduler
 
-# helper functions
+# helpers
 
 def must_be_number_between(min, max):
     # min max is inclusive
-    # return lambda value: value.isnumeric() and (min <= value <= max)
     def validator(value):
         if not value.isnumeric():
             return False
-        copy = int(value)
 
-        # now we can assume copy is an integer
-        return True
+        return min <= int(value) <= max
 
     return validator
 
+def must_be_number_in(allowed_values):
+    def validator(value):
+        if not value.isnumeric():
+            return False
+
+        return int(value) in allowed_values
+
+    return validator
+
+def string_to_bool(string):
+    return bool( int(string) )
+
+def bool_to_string(bool):
+    return '1' if bool else '0'
+
+def schedule_to_string(schedule):
+    return str(schedule.value)
+
+def string_to_schedule(string):
+    return DltaskScheduler.SchedulePeriods(int(string))
+
+# convert schedule enums to underlying integer values
+schedule_values = [
+    member.value for member in DltaskScheduler.SchedulePeriods.__members__.values()
+]
 
 class Settings:
+    # functions to validate values read from settings file
     OPTION_VALIDATORS = {
         constants.SAVE_LOCATION: lambda value: value != '',
         constants.IS_SCHEDULED: must_be_number_between(0, 1),
-        constants.SCHEDULE_PERIOD: must_be_number_between(1, 3),
-        constants.START_HOUR: must_be_number_between(1, 3),
-        constants.START_MINUTE: must_be_number_between(1, 3),
+        constants.SCHEDULE_PERIOD: must_be_number_in(schedule_values),
+        constants.START_HOUR: must_be_number_between(0, 23),
+        constants.START_MINUTE: must_be_number_between(0, 59),
+        'default': lambda value: True,
+    }
+    # conversion functions for data coming in/out of this class
+    OPTION_CONVERTERS = {
+        constants.SAVE_LOCATION: { 'set': str, 'get': Path },
+        constants.IS_SCHEDULED: { 'set': bool_to_string, 'get': string_to_bool },
+        constants.SCHEDULE_PERIOD: { 'set': schedule_to_string, 'get': string_to_schedule },
+        constants.START_HOUR: { 'set': str, 'get': int },
+        constants.START_MINUTE: { 'set': str, 'get': int },
+        'default': lambda value: value,
     }
 
     def __init__(self, filepath):
@@ -43,25 +77,23 @@ class Settings:
         settings = deepcopy(self._settings)
         
         # convert to types meaningful to rest of the app
-        settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION] = Path( settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION] )
-        settings[constants.SCHEDULE_SECTION][constants.IS_SCHEDULED] = int( self._settings[constants.SCHEDULE_SECTION][constants.IS_SCHEDULED] )
-        settings[constants.SCHEDULE_SECTION][constants.SCHEDULE_PERIOD] = int( self._settings[constants.SCHEDULE_SECTION][constants.SCHEDULE_PERIOD] )
-        settings[constants.SCHEDULE_SECTION][constants.START_HOUR] = int( self._settings[constants.SCHEDULE_SECTION][constants.START_HOUR] )
-        settings[constants.SCHEDULE_SECTION][constants.START_MINUTE] = int( self._settings[constants.SCHEDULE_SECTION][constants.START_MINUTE] )
+        for section, options in settings.items():
+            for name, option in options.items():
+                convert = self._get_option_converter(name, 'get')
+                settings[section][name] = convert(option)
 
         return settings
 
     def set(self, settings):
         copy = deepcopy(settings)
-        self._settings.update(copy)
-        
-        # store as normal string
-        self._settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION] = str( self._settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION] )
-        self._settings[constants.SCHEDULE_SECTION][constants.IS_SCHEDULED] = str( self._settings[constants.SCHEDULE_SECTION][constants.IS_SCHEDULED])
-        self._settings[constants.SCHEDULE_SECTION][constants.SCHEDULE_PERIOD] = str( self._settings[constants.SCHEDULE_SECTION][constants.SCHEDULE_PERIOD])
-        self._settings[constants.SCHEDULE_SECTION][constants.START_HOUR] = str( self._settings[constants.SCHEDULE_SECTION][constants.START_HOUR])
-        self._settings[constants.SCHEDULE_SECTION][constants.START_MINUTE] = str( self._settings[constants.SCHEDULE_SECTION][constants.START_MINUTE])
+        for section, options in copy.items():
+            self._settings[section].update(options)
 
+            # convert to storeable values
+            for name, option in options.items():
+                convert = self._get_option_converter(name, 'set')
+                self._settings[section][name] = convert(option)
+        
     def write(self):
         self._parser.read_dict(self._settings)
         with self._filepath.open(mode='w', encoding='utf-8') as fp:
@@ -86,8 +118,10 @@ class Settings:
 
     def _readSettingsFromFile(self):
         self._parser.read(self._filepath)
-        for section, items in self._parser.items():
-            self._settings[section] = { k: items[k] for k in items }
+        for section, options in self._parser.items():
+            self._settings[section] = {
+                name: options[name] for name in options
+            }
 
     def _normalizeSettings(self):
         self._create_missing_sections()
@@ -95,40 +129,36 @@ class Settings:
 
     def _create_missing_sections(self):
         if constants.API_SECTION not in self._settings:
-            options = [
+            self._set_default_section(constants.API_SECTION, [
                 constants.ACCESS_TOKEN,
                 constants.ACCESS_SECRET,
                 constants.CONSUMER_KEY,
                 constants.CONSUMER_SECRET,
-            ]
-            self._set_default_section(constants.API_SECTION, options)
+            ])
         
         if constants.GENERAL_SECTION not in self._settings:
-            options = [constants.SAVE_LOCATION]
-            self._set_default_section(constants.GENERAL_SECTION, options)
+            self._set_default_section(constants.GENERAL_SECTION,[
+                constants.SAVE_LOCATION
+            ])
 
         if constants.SCHEDULE_SECTION not in self._settings:
-            options = [
+            self._set_default_section(constants.SCHEDULE_SECTION, [
                 constants.IS_SCHEDULED,
                 constants.SCHEDULE_PERIOD,
                 constants.START_HOUR,
                 constants.START_MINUTE,
-            ]
-            self._set_default_section(constants.SCHEDULE_SECTION, options)
+            ])
 
     def _convert_invalid_values(self):
-        section = constants.GENERAL_SECTION
-        options = [constants.SAVE_LOCATION]
-        self._convert_section_invalid_values(section, options)
-
-        section = constants.SCHEDULE_SECTION
-        options = [
+        self._convert_section_invalid_values(constants.GENERAL_SECTION, [
+            constants.SAVE_LOCATION
+        ])
+        self._convert_section_invalid_values(constants.SCHEDULE_SECTION, [
             constants.IS_SCHEDULED,
             constants.SCHEDULE_PERIOD,
             constants.START_HOUR,
             constants.START_MINUTE,
-        ]
-        self._convert_section_invalid_values(section, options)
+        ])
 
     def _set_default_section(self, section, options):
         self._settings[section] = {
@@ -142,15 +172,22 @@ class Settings:
                 self._settings[section][option] = self._get_default(option)
 
     def _get_default(self, option):
-        DEFAULT_VALUE_GETTER = {
+        DEFAULT_VALUES = {
             constants.SAVE_LOCATION: str(self._filepath.parents[0]),
             constants.IS_SCHEDULED: '0',
-            constants.SCHEDULE_PERIOD: '1',
+            constants.SCHEDULE_PERIOD: '0',
             constants.START_HOUR: '0',
             constants.START_MINUTE: '0',
         }
 
-        return DEFAULT_VALUE_GETTER.get(option, '')
+        return DEFAULT_VALUES.get(option, '')
 
     def _get_option_validator(self, option):
-        return self.OPTION_VALIDATORS.get(option, lambda value: True)
+        return self.OPTION_VALIDATORS.get(option, self.OPTION_VALIDATORS['default'])
+
+    def _get_option_converter(self, option, get_or_set):
+        try:
+            converters = self.OPTION_CONVERTERS[option]
+            return converters[get_or_set]
+        except KeyError as e:
+            return self.OPTION_CONVERTERS['default']
