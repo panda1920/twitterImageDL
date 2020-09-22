@@ -1,4 +1,5 @@
 import os
+import logging
 from pathlib import Path
 
 from twitter_image_dl.readUserList import readUserList
@@ -12,6 +13,8 @@ import twitter_image_dl.global_constants as constants
 import twitter_image_dl.exceptions as exceptions
 import twitter_image_dl.global_constants as constants
 
+logger = logging.getLogger(__name__)
+
 """
 Class that provides bindings to other dependant classes/functions
 for twitterimagedl.py
@@ -19,6 +22,8 @@ Makes it easier to swap out classes with mocks/fakes for tests
 """
 class RuntimeBindings:
     def __init__(self, app_path):
+        logging.info('Initializing objects')
+
         self._settings = Settings(app_path / constants.FILENAME_SETTINGS)
         self._save_location = Path(
             self._settings.get()[constants.GENERAL_SECTION][constants.SAVE_LOCATION]
@@ -30,6 +35,8 @@ class RuntimeBindings:
         )
         self._scheduler = DltaskScheduler(app_path)
         self._abort = AbortFlag()
+
+        logging.info('Finished initializing objects')
 
     def get_settings(self):
         return self._settings

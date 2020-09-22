@@ -2,6 +2,9 @@
 Constant values used around the app
 """
 
+MODULE_NAME = 'twitter_image_dl'
+LOGFILE_NAME = 'lastrun.log'
+
 FILENAME_HISTORY = 'history.json'
 FILENAME_USERS = 'users.txt'
 FILENAME_SETTINGS = 'settings.conf'

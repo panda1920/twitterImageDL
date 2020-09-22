@@ -3,8 +3,11 @@ import urllib.parse
 from urllib.error import HTTPError
 import json
 import time
+import logging
 
 from twitter_image_dl.twitterAPIAuthentication import createOAuth1HeaderString, createAuthInfo
+
+logger = logging.getLogger(__name__)
 
 class TweetsRetriever_TwitterAPI:
     METHOD = 'GET'
@@ -18,10 +21,15 @@ class TweetsRetriever_TwitterAPI:
     }
 
     def __init__(self, history, settings):
+        logger.info('Initializting tweet retriever object')
+
         self._history = history
         self._settings = settings
 
+        logger.info('Finished initializting tweet retriever object')
+
     def getTweetsInfo(self, username):
+        logger.info('Retrieving tweets from user %s', username)
         print(f'getting Tweets from {username}...')
 
         allTweets = self.getAllTweetsFromUser(username)

@@ -1,8 +1,13 @@
 import re
+import logging
 
 import twitter_image_dl.exceptions as exceptions
 
+logger = logging.getLogger(__name__)
+
 def readUserList(filepath):
+    logger.info('Loading userlist from file %s', str(filepath))
+
     usernames = [
         sanitizeUsername(username)
         for username in getList(filepath)
@@ -25,6 +30,8 @@ def sanitizeUsername(username):
     return sanitized
 
 def removeDuplicates(usernames):
+    logger.info('Removing duplicate usernames')
+
     uniques = []
     for username in usernames:
         if username not in uniques:
@@ -33,6 +40,8 @@ def removeDuplicates(usernames):
     return uniques
 
 def removeInvalidUsernames(usernames):
+    logger.info('Removing invalid usernames')
+
     valid_pattern = r'^[A-Za-z0-9_]+$'
     return [
         username for username in usernames

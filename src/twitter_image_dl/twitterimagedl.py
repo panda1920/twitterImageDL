@@ -1,15 +1,17 @@
 from pathlib import Path
 import pdb
+import logging
 
 from twitter_image_dl.parseArgument import parseArgument
 from twitter_image_dl.runtime_bindings import RuntimeBindings
 import twitter_image_dl.global_constants as constants
 
 MEDIATYPES = ['images', 'gifs', 'videos']
+logger = logging.getLogger(__name__)
 
 def dlmedia(bindings):
-    # settings = parseArgument()
-    # pdb.set_trace()
+    logger.info('Starting download task')
+
     bindings.get_settings().validate_settings()
     history_path = bindings.get_save_location() / constants.FILENAME_HISTORY
     bindings.get_history().loadFromFile(history_path)
@@ -18,10 +20,13 @@ def dlmedia(bindings):
     
     bindings.get_history().writeToFile(history_path)
 
+    logger.info('Finished download task')
+
 def downloadUserMedia(bindings):
     users = bindings.get_users()
 
     for username in users:
+        logger.info('Downloading medis from user %s', username)
         if bindings.get_abort().is_set():
             break
         
@@ -34,6 +39,8 @@ def downloadUserMedia(bindings):
             bindings.download_media(mediaURLs, mediaSavePath)
 
 def getFileURLsFromTweets(tweets, mediaType):
+    logger.info('Extracting media file urls from tweets')
+
     fileURLs = []
     for tweet in tweets:
         fileURLs += tweet[mediaType]

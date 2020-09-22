@@ -3,7 +3,7 @@ from tkinter import ttk
 
 class SettingSelection(ttk.Frame):
     """
-    Combobox to chose which setting criteria to modify
+    Listbox to chose which setting criteria to modify
     """
     def __init__(self, bindings, master, selections):
         super().__init__(master)
