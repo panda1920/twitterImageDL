@@ -30,7 +30,7 @@ class DownloadHistory:
             self._history = json.load(f)
 
     def updateHistory(self, username, tweetId):
-        logger.debug('Updating history of user %s', username)
+        logger.info('Updating history of user %s', username)
 
         currentTimeString = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
         self._history[username] = {
@@ -39,7 +39,7 @@ class DownloadHistory:
         }
 
     def getHistory(self, username):
-        logger.debug('Retrieving history of user %s', username)
+        logger.info('Retrieving history of user %s', username)
 
         if username in self._history:
             return self._history[username]['tweetId']

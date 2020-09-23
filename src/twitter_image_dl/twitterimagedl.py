@@ -11,24 +11,33 @@ logger = logging.getLogger(__name__)
 
 def dlmedia(bindings):
     logger.info('Starting download task')
+    print('Starting download task...')
 
-    bindings.get_settings().validate_settings()
-    history_path = bindings.get_save_location() / constants.FILENAME_HISTORY
-    bindings.get_history().loadFromFile(history_path)
+    try:
+        bindings.get_settings().validate_settings()
+        history_path = bindings.get_save_location() / constants.FILENAME_HISTORY
+        bindings.get_history().loadFromFile(history_path)
 
-    downloadUserMedia(bindings)
-    
-    bindings.get_history().writeToFile(history_path)
+        downloadUserMedia(bindings)
+        
+        bindings.get_history().writeToFile(history_path)
+    except:
+        logger.exception('Terminated download task due to an error')
+        print('Terminated download task due to an error')
 
     logger.info('Finished download task')
+    print('Download task finished!')
 
 def downloadUserMedia(bindings):
     users = bindings.get_users()
 
     for username in users:
-        logger.info('Downloading medis from user %s', username)
         if bindings.get_abort().is_set():
+            logger.info('Terminating download due to abort flag')
             break
+
+        logger.info('Downloading files from user %s', username)
+        print(f'Downloading from user {username}')
         
         userSavePath = createAndReturnPath(bindings.get_save_location(), username)
         tweets = bindings.get_tweet_retriever().getTweetsInfo(username)
@@ -39,8 +48,6 @@ def downloadUserMedia(bindings):
             bindings.download_media(mediaURLs, mediaSavePath)
 
 def getFileURLsFromTweets(tweets, mediaType):
-    logger.info('Extracting media file urls from tweets')
-
     fileURLs = []
     for tweet in tweets:
         fileURLs += tweet[mediaType]

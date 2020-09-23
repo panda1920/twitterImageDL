@@ -30,7 +30,6 @@ class TweetsRetriever_TwitterAPI:
 
     def getTweetsInfo(self, username):
         logger.info('Retrieving tweets from user %s', username)
-        print(f'getting Tweets from {username}...')
 
         allTweets = self.getAllTweetsFromUser(username)
 
@@ -119,7 +118,8 @@ class TweetsRetriever_TwitterAPI:
             with urllib.request.urlopen(request) as response:
                 return json.loads( response.read() )
         except HTTPError:
-            print(f'failed to retrieve tweet from user {username}')
+            logger.warning('Failed to retrieve tweet from user %', username)
+            print(f'Failed to retrieve tweets from user {username}: the user may not exist anymore')
             return []
 
     def _create_request_object(self, username, maxId, mostRecentTweetId):
@@ -139,13 +139,15 @@ class TweetsRetriever_TwitterAPI:
         return queryString
 
     def createHeader(self, queryString):
+        current_settings = self._settings.get()
+
         return {
             'Authorization': createOAuth1HeaderString(
                 self.ENDPOINT_URL,
                 self.METHOD,
                 queryString,
                 {},
-                createAuthInfo(self._settings),
-                self._settings
+                createAuthInfo(current_settings),
+                current_settings
             ),
         }

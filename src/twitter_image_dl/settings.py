@@ -121,11 +121,15 @@ class Settings:
             self._settings[constants.API_SECTION][constants.CONSUMER_KEY] == '' or
             self._settings[constants.API_SECTION][constants.CONSUMER_SECRET] == ''
         ):
-            raise exceptions.APINotFound('Please make sure to fill out Twitter API related options in settings')
+            print('Make sure to fill out Twitter API related options in settings')
+            logger.warning('Twitter API key was not found in settings')
+            raise exceptions.APINotFound('Twitter API key was not found in settings')
         if (
             not Path(self._settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION]).exists()
         ):
-            raise exceptions.SaveLocationNotExist('Please make sure to specify a valid save location in settings')
+            print('Make sure to specify a valid save location in settings')
+            logger.warning('Save location in settings doest not exist')
+            raise exceptions.SaveLocationNotExist('Save location in settings doest not exist')
 
     def _configureParser(self):
         # avoid automatic conversion of each option names to lower case

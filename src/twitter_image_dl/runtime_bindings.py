@@ -25,10 +25,6 @@ class RuntimeBindings:
         logging.info('Initializing objects')
 
         self._settings = Settings(app_path / constants.FILENAME_SETTINGS)
-        self._save_location = Path(
-            self._settings.get()[constants.GENERAL_SECTION][constants.SAVE_LOCATION]
-        )
-        self._users = readUserList(self._save_location / constants.FILENAME_USERS)
         self._history = DownloadHistory()
         self._retriever = TweetsRetriever_TwitterAPI(
             self._history, self._settings
@@ -42,10 +38,12 @@ class RuntimeBindings:
         return self._settings
 
     def get_save_location(self):
-        return self._save_location
+        return Path(
+            self._settings.get()[constants.GENERAL_SECTION][constants.SAVE_LOCATION]
+        )
 
     def get_users(self):
-        return self._users
+        return readUserList(self.get_save_location() / constants.FILENAME_USERS)
 
     def get_history(self):
         return self._history

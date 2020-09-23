@@ -2,6 +2,7 @@ import re
 import logging
 
 import twitter_image_dl.exceptions as exceptions
+import twitter_image_dl.global_constants as constants
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +20,8 @@ def getList(filepath):
         with open(filepath, 'r', encoding='utf-8') as f:
             return f.readlines()
     except Exception as e:
-        filepath.touch()
+        print(f'Meke sure you create a file "{constants.FILENAME_USERS}" containing list of users you want to download from')
+        logger.warning('Userlist file was not found')
         return []
 
 def sanitizeUsername(username):

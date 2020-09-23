@@ -92,10 +92,12 @@ class TestInstantiation:
         path, *_ = mocks['settings'].call_args_list[0][0]
         assert path == tmp_path / constants.FILENAME_SETTINGS
 
-    def test_pathPassedToReadUserListIsSaveLocationInSetting(self, tmp_path, mocks):
+    def test_get_users_receivesSaveLocationInSettings(self, tmp_path, mocks):
         bindings = RuntimeBindings(tmp_path)
         settings = mocks['settings'](DOWNLOAD_DIR).get()
         save_location = settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION]
+
+        bindings.get_users()
 
         assert len(mocks['readuserlist'].call_args_list) == 1
         path, *_ = mocks['readuserlist'].call_args_list[0][0]

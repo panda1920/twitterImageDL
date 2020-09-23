@@ -7,13 +7,11 @@ from unittest.mock import create_autospec
 import pytest
 
 import twitter_image_dl.global_constants as constants
-from twitter_image_dl.settings import Settings
 from twitter_image_dl.twitterAPIAuthentication import createOAuth1HeaderString, createSignature, createSignatureBaseString, createAuthInfo
 
 @pytest.fixture(scope='function')
 def test_settings():
-    mocked_settings = create_autospec(spec=Settings)
-    mocked_settings.get.return_value = {
+    yield {
         constants.API_SECTION: {
             constants.CONSUMER_KEY: 'xvz1evFS4wEEPTGEFPHBog',
             constants.CONSUMER_SECRET: 'kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw',
@@ -21,8 +19,6 @@ def test_settings():
             constants.ACCESS_SECRET: 'LswwdoUaIvS8ltyTt5jkRh4J50vUPVVHtR2YPi5kE',
         }
     }
-
-    yield mocked_settings
 
 class TestOauth1:
     testURLEndpoint = 'https://api.twitter.com/1.1/statuses/update.json'

@@ -20,7 +20,7 @@ def downloadMedia(urls, saveLocation):
             future.result(timeout=600)
     
 def download(url, dst):
-    logger.info('Started downloading from %s', url)
+    logger.debug('Downloading from %s', url)
     
     if Path(dst).exists():
         return
@@ -30,8 +30,6 @@ def download(url, dst):
     except Exception as e:
         logger.exception('Failed to download from %s', url)
         raise exceptions.DownloadErrorException(f'Failed to download from {url}')
-
-    logger.info('Finished downloading %s', url)
 
 def createDownloadFilePath(url, saveLocation):
     logger.info('Creating save location %s', str(saveLocation))
