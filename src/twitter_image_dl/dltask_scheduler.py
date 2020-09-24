@@ -10,10 +10,9 @@ logger = logging.getLogger(__name__)
 
 class DltaskScheduler:
     class SchedulePeriods(Enum):
-        MINUTE = 0
-        HOURLY = 1
-        DAILY  = 2
-        WEEKLY = 3
+        HOURLY = 0
+        DAILY  = 1
+        WEEKLY = 2
     TASKNAME = constants.TASKNAME
 
     def __init__(self, app_path):

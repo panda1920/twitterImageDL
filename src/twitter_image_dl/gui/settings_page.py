@@ -19,6 +19,7 @@ class SettingsPage(ttk.Frame):
     def lift(self, *args):
         super().lift(*args)
         self._selections.select(0)
+        self._schedule_settings.reload()
 
     def set_close_callback(self, callback):
         self._close_callback = callback
@@ -56,8 +57,18 @@ class SettingsPage(ttk.Frame):
         self._close_button.grid(row=2, column=1, sticky='nsew')
 
     def _bind_callbacks(self):
+        self._apply_change_button.configure(command=self._apply_change_handler)
         self._close_button.configure(command=self._close_handler)
         self._selections.set_selection_callback(self._display_setting_page)
+
+    def _apply_change_handler(self):
+        self._schedule_settings.apply_change()
+        
+        try:
+            self._bindings.get_settings().write()
+            print('Succesfully updated settings file')
+        except Exception as e:
+            print('Failed to update settings file')
 
     def _close_handler(self):
         if self._close_callback:

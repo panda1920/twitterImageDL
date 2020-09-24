@@ -1,25 +1,37 @@
 import tkinter as tk
 from tkinter import ttk
 
+import twitter_image_dl.global_constants as constants
+from twitter_image_dl.dltask_scheduler import DltaskScheduler
+
 class ScheduleSettings(ttk.Frame):
     def __init__(self, bindings, master, **config):
         super().__init__(master, **config)
         self._bindings = bindings
+        self._schedule_intervals = list( DltaskScheduler.SchedulePeriods.__members__.keys() )
         self._initializeWidgets()
 
     def lift(self, *args):
         super().lift(*args)
-        self._reload_inputs()
 
     def apply_change(self):
-        pass
+        data = {
+            constants.IS_SCHEDULED: self._schedule_toggled.get(),
+            constants.SCHEDULE_PERIOD: DltaskScheduler.SchedulePeriods[ self._schedules_options.get() ],
+            constants.START_MINUTE: int( self._minutes.get() ),
+            constants.START_HOUR: int( self._hours.get() ),
+        }
+
+        self._bindings.get_settings().set({ constants.SCHEDULE_SECTION: data })
+
+    def reload(self):
+        self._load_values()
 
     def _initializeWidgets(self):
         self._create_widgets()
         self._set_widget_geometry()
         self._set_widget_styles()
         self._bind_callbacks()
-        self._load_values()
 
     def _create_widgets(self):
         self._schedule_toggled = tk.BooleanVar()
@@ -33,7 +45,7 @@ class ScheduleSettings(ttk.Frame):
         self._schedules = ttk.Frame(self)
         self._schedules_label = ttk.Label(self._schedules, text='Execution interval')
         self._schedules_options = ttk.Combobox(self._schedules,
-            values=['hourly', 'daily', 'monthly'],
+            values=self._schedule_intervals,
             state='disable'
         )
 
@@ -77,7 +89,7 @@ class ScheduleSettings(ttk.Frame):
         self._toggle_schedule.configure(command=self._toggle_handler)
 
     def _load_values(self):
-        self._schedules_options.set('hourly')
+        self._schedules_options.set(self._schedule_intervals[0])
 
     def _toggle_handler(self, *args):
         if self._schedule_toggled.get():
@@ -88,7 +100,3 @@ class ScheduleSettings(ttk.Frame):
             self._schedules_options.configure(state='disable')
             self._minutes.configure(state='disable')
             self._hours.configure(state='disable')
-
-    def _reload_inputs(self):
-        self._load_values()
-        # self._apply_button.configure(state='disabled')
