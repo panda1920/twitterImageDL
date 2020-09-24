@@ -29,6 +29,7 @@ class SettingsPage(ttk.Frame):
         self._bind_callbacks()
 
     def _create_widgets(self):
+        self._apply_change_button = ttk.Button(self, text='Apply Change')
         self._close_button = ttk.Button(self, text='Close')
         self._general_settings = GeneralSettings(self._bindings, self)
         self._schedule_settings = ScheduleSettings(self._bindings, self)
@@ -42,15 +43,17 @@ class SettingsPage(ttk.Frame):
         )
 
     def _set_widget_geometry(self):
+        self.columnconfigure(1, weight=1)
+        self.rowconfigure(0, weight=1)
+        self.rowconfigure(1, weight=0)
+        self.rowconfigure(2, weight=0)
+
         self._general_settings.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
         self._api_settings.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
         self._schedule_settings.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
         self._selections.grid(row=0, column=0, sticky='nsew', rowspan=2)
-        self._close_button.grid(row=1, column=1, sticky='sew')
-        
-        self.columnconfigure(1, weight=1)
-        self.rowconfigure(0, weight=1)
-        self.rowconfigure(1, weight=1)
+        self._apply_change_button.grid(row=1, column=1, sticky='nsew')
+        self._close_button.grid(row=2, column=1, sticky='nsew')
 
     def _bind_callbacks(self):
         self._close_button.configure(command=self._close_handler)

@@ -20,7 +20,7 @@ class GeneralSettings(ttk.Frame):
         self._set_widget_geometry()
         # self._set_widget_styles()
         self._bind_callbacks()
-        self._load_input_values()
+        self._load_values()
 
     def _create_widgets(self):
         self._inputs = [
@@ -38,7 +38,7 @@ class GeneralSettings(ttk.Frame):
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
 
-    def _load_input_values(self):
+    def _load_values(self):
         settings = self._bindings.get_settings().get()
 
         for input in self._inputs:
@@ -79,5 +79,5 @@ class GeneralSettings(ttk.Frame):
             print('Failed to update settings file')
         
     def _reload_inputs(self):
-        self._load_input_values()
+        self._load_values()
         self._apply_button.configure(state='disabled')

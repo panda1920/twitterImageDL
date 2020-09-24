@@ -33,7 +33,7 @@ def downloadUserMedia(bindings):
 
     for username in users:
         if bindings.get_abort().is_set():
-            logger.info('Terminating download due to abort flag')
+            logger.info('Terminating download task due to abort flag')
             break
 
         logger.info('Downloading files from user %s', username)

@@ -63,7 +63,7 @@ Pulling files/folders out of its original location may cause the app to break.
 - [x] Convert the entire app into windows executable to make it distributable
 - [x] Set up CI/CD to automate test/build/distribution of app
 - [ ] Brush up GUI
-- [ ] Better logging and message output
+- [x] Better logging and message output
 - [ ] Integrate task scheduler functionality to the GUI
 - [ ] Adapt to new twitter APIv2.0
 - [ ] Create executable for other systems (maybe)
