@@ -19,6 +19,8 @@ class SettingsPage(ttk.Frame):
     def lift(self, *args):
         super().lift(*args)
         self._selections.select(0)
+        self._general_settings.reload()
+        self._api_settings.reload()
         self._schedule_settings.reload()
 
     def set_close_callback(self, callback):
@@ -62,6 +64,8 @@ class SettingsPage(ttk.Frame):
         self._selections.set_selection_callback(self._display_setting_page)
 
     def _apply_change_handler(self):
+        self._general_settings.apply_change()
+        self._api_settings.apply_change()
         self._schedule_settings.apply_change()
         
         try:

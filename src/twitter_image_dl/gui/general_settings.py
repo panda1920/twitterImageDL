@@ -13,7 +13,18 @@ class GeneralSettings(ttk.Frame):
 
     def lift(self, *args):
         super().lift(*args)
-        self._reload_inputs()
+
+    def apply_change(self):
+        new_settings = { constants.GENERAL_SECTION: {} }
+        general_section = new_settings[constants.GENERAL_SECTION]
+
+        for input in self._inputs:
+            general_section[input.get_key()] = input.get_value()
+
+        self._bindings.get_settings().set(new_settings)
+
+    def reload(self):
+        self._load_values()
         
     def _initializeWidgets(self):
         self._create_widgets()
@@ -24,16 +35,14 @@ class GeneralSettings(ttk.Frame):
 
     def _create_widgets(self):
         self._inputs = [
-            SettingsInput(self, 'save location:', constants.SAVE_LOCATION),
+            SettingsInput(self, 'Save location:', constants.SAVE_LOCATION),
         ]
         self._save_in_button = ttk.Button(self, text='Save in')
-        self._apply_button = ttk.Button(self, text='Apply change', state='disabled')
 
     def _set_widget_geometry(self):
         for idx, input in enumerate( self._inputs ):
             input.grid(column=0, row=idx, sticky='we', columnspan=2, pady=2)
         self._save_in_button.grid(row=0, column=2, sticky='we', pady=2)
-        self._apply_button.grid(row=1, column=2, sticky='we')
 
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
@@ -50,11 +59,10 @@ class GeneralSettings(ttk.Frame):
 
     def _bind_callbacks(self):
         for input in self._inputs:
-            input.set_key_callback(lambda e:
-                self._apply_button.configure(state='active')
+            input.set_key_callback(lambda e: None
+                # fire some event to activate parent apply button
             )
         self._save_in_button.configure(command=self._save_in_handler)
-        self._apply_button.configure(command=self._write_widget_values)
 
     def _save_in_handler(self):
         new_save_location = filedialog.askdirectory(mustexist=True)
@@ -62,22 +70,4 @@ class GeneralSettings(ttk.Frame):
             return
         
         self._inputs[0].set_value(Path(new_save_location))
-        self._apply_button.configure(state='active')
-
-    def _write_widget_values(self):
-        new_settings = { constants.GENERAL_SECTION: {} }
-        general_section = new_settings[constants.GENERAL_SECTION]
-
-        for input in self._inputs:
-            general_section[input.get_key()] = input.get_value()
-
-        try:
-            self._bindings.get_settings().set(new_settings)
-            self._bindings.get_settings().write()
-            print('Successfuly updated settings file')
-        except e as Exception:
-            print('Failed to update settings file')
-        
-    def _reload_inputs(self):
-        self._load_values()
-        self._apply_button.configure(state='disabled')
+        # fire some event to activate parent apply button
