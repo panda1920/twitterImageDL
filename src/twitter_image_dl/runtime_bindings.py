@@ -1,4 +1,5 @@
 import os
+import logging
 from pathlib import Path
 
 from twitter_image_dl.readUserList import readUserList
@@ -12,6 +13,8 @@ import twitter_image_dl.global_constants as constants
 import twitter_image_dl.exceptions as exceptions
 import twitter_image_dl.global_constants as constants
 
+logger = logging.getLogger(__name__)
+
 """
 Class that provides bindings to other dependant classes/functions
 for twitterimagedl.py
@@ -19,11 +22,9 @@ Makes it easier to swap out classes with mocks/fakes for tests
 """
 class RuntimeBindings:
     def __init__(self, app_path):
+        logging.info('Initializing objects')
+
         self._settings = Settings(app_path / constants.FILENAME_SETTINGS)
-        self._save_location = Path(
-            self._settings.get()[constants.GENERAL_SECTION][constants.SAVE_LOCATION]
-        )
-        self._users = readUserList(self._save_location / constants.FILENAME_USERS)
         self._history = DownloadHistory()
         self._retriever = TweetsRetriever_TwitterAPI(
             self._history, self._settings
@@ -31,14 +32,18 @@ class RuntimeBindings:
         self._scheduler = DltaskScheduler(app_path)
         self._abort = AbortFlag()
 
+        logging.info('Finished initializing objects')
+
     def get_settings(self):
         return self._settings
 
     def get_save_location(self):
-        return self._save_location
+        return Path(
+            self._settings.get()[constants.GENERAL_SECTION][constants.SAVE_LOCATION]
+        )
 
     def get_users(self):
-        return self._users
+        return readUserList(self.get_save_location() / constants.FILENAME_USERS)
 
     def get_history(self):
         return self._history

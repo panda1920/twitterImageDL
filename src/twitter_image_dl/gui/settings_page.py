@@ -19,6 +19,9 @@ class SettingsPage(ttk.Frame):
     def lift(self, *args):
         super().lift(*args)
         self._selections.select(0)
+        self._general_settings.reload()
+        self._api_settings.reload()
+        self._schedule_settings.reload()
 
     def set_close_callback(self, callback):
         self._close_callback = callback
@@ -29,6 +32,7 @@ class SettingsPage(ttk.Frame):
         self._bind_callbacks()
 
     def _create_widgets(self):
+        self._apply_change_button = ttk.Button(self, text='Apply Change')
         self._close_button = ttk.Button(self, text='Close')
         self._general_settings = GeneralSettings(self._bindings, self)
         self._schedule_settings = ScheduleSettings(self._bindings, self)
@@ -42,19 +46,33 @@ class SettingsPage(ttk.Frame):
         )
 
     def _set_widget_geometry(self):
+        self.columnconfigure(1, weight=1)
+        self.rowconfigure(0, weight=1)
+        self.rowconfigure(1, weight=0)
+        self.rowconfigure(2, weight=0)
+
         self._general_settings.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
         self._api_settings.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
         self._schedule_settings.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
         self._selections.grid(row=0, column=0, sticky='nsew', rowspan=2)
-        self._close_button.grid(row=1, column=1, sticky='sew')
-        
-        self.columnconfigure(1, weight=1)
-        self.rowconfigure(0, weight=1)
-        self.rowconfigure(1, weight=1)
+        self._apply_change_button.grid(row=1, column=1, sticky='nsew')
+        self._close_button.grid(row=2, column=1, sticky='nsew')
 
     def _bind_callbacks(self):
+        self._apply_change_button.configure(command=self._apply_change_handler)
         self._close_button.configure(command=self._close_handler)
         self._selections.set_selection_callback(self._display_setting_page)
+
+    def _apply_change_handler(self):
+        self._general_settings.apply_change()
+        self._api_settings.apply_change()
+        self._schedule_settings.apply_change()
+        
+        try:
+            self._bindings.get_settings().write()
+            print('Succesfully updated settings file')
+        except Exception as e:
+            print('Failed to update settings file')
 
     def _close_handler(self):
         if self._close_callback:

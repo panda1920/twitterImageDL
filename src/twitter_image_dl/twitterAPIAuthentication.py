@@ -7,8 +7,8 @@ import urllib.parse
 import twitter_image_dl.global_constants as constants
 
 def createAuthInfo(settings):
-    consumerKey = settings.get()[constants.API_SECTION][constants.CONSUMER_KEY]
-    accessToken = settings.get()[constants.API_SECTION][constants.ACCESS_TOKEN]
+    consumerKey = settings[constants.API_SECTION][constants.CONSUMER_KEY]
+    accessToken = settings[constants.API_SECTION][constants.ACCESS_TOKEN]
     nonce = uuid.uuid4().hex
     requestTime = str( math.floor(time.time()) )
     
@@ -68,6 +68,6 @@ def createParameterString(params):
     return paramString[:-1] # remove last '&'
 
 def createSigningKey(settings):
-    consumerSecret = settings.get()[constants.API_SECTION][constants.CONSUMER_SECRET]
-    accessSecret = settings.get()[constants.API_SECTION][constants.ACCESS_SECRET]
+    consumerSecret = settings[constants.API_SECTION][constants.CONSUMER_SECRET]
+    accessSecret = settings[constants.API_SECTION][constants.ACCESS_SECRET]
     return f'{quote(consumerSecret)}&{accessSecret}'

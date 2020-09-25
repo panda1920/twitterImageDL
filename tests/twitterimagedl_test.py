@@ -2,6 +2,7 @@ from pathlib import Path
 from unittest.mock import create_autospec
 import shutil
 import sys
+import pdb
 
 import pytest
     
@@ -58,6 +59,17 @@ def test_dlmediaShouldValidateSettings(mock_bindings):
     dlmedia(mock_bindings)
 
     assert len(mock_settings.validate_settings.call_args_list) == 1
+
+def test_dlmediaShouldCaptureExceptionsFromValidateSettings(mock_bindings):
+    exceptions_to_throw = [
+        exceptions.SaveLocationNotExist('Save location does not exist'),
+        exceptions.APINotFound('Api was not found'),
+    ]
+
+    for exception in exceptions_to_throw:
+        mock_bindings.get_settings.side_effect = exception
+
+        dlmedia(mock_bindings)
 
 def test_dlmediaShouldLoadFromHistoryFile(mock_bindings):
     mock_history = mock_bindings.get_history.return_value

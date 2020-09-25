@@ -1,21 +1,36 @@
 from enum import Enum
 from pathlib import Path
 import subprocess
+import logging
+import json
 
 import twitter_image_dl.global_constants as constants
 
+logger = logging.getLogger(__name__)
+
 class DltaskScheduler:
     class SchedulePeriods(Enum):
-        MINUTE = 0
-        HOURLY = 1
-        DAILY  = 2
-        WEEKLY = 3
+        HOURLY = 0
+        DAILY  = 1
+        WEEKLY = 2
     TASKNAME = constants.TASKNAME
 
     def __init__(self, app_path):
+        logger.info('Initializing task scheduler object')
+
         self._taskpath = app_path / constants.FILENAME_DL
 
+        logger.info('Finished initializing task scheduler object')
+
     def register(self, schedule: SchedulePeriods, options = None):
+        logger.info('Registering task to schedule')
+        logger.debug(
+            'executing: %s, schedule : %s, options: %s',
+            self._taskpath,
+            schedule.name,
+            json.dumps(options)
+        )
+        
         if options is None:
             options = {}
         
@@ -26,6 +41,8 @@ class DltaskScheduler:
         )
 
     def deregister(self):
+        logger.info('Deregistering task from schedule')
+
         self._schedule_task('/Delete', '/F')
 
     def _schedule_task(self, op_string, *args):

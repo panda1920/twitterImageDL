@@ -3,8 +3,11 @@ import urllib.parse
 from urllib.error import HTTPError
 import json
 import time
+import logging
 
 from twitter_image_dl.twitterAPIAuthentication import createOAuth1HeaderString, createAuthInfo
+
+logger = logging.getLogger(__name__)
 
 class TweetsRetriever_TwitterAPI:
     METHOD = 'GET'
@@ -18,11 +21,15 @@ class TweetsRetriever_TwitterAPI:
     }
 
     def __init__(self, history, settings):
+        logger.info('Initializting tweet retriever object')
+
         self._history = history
         self._settings = settings
 
+        logger.info('Finished initializting tweet retriever object')
+
     def getTweetsInfo(self, username):
-        print(f'getting Tweets from {username}...')
+        logger.info('Retrieving tweets from user %s', username)
 
         allTweets = self.getAllTweetsFromUser(username)
 
@@ -111,7 +118,8 @@ class TweetsRetriever_TwitterAPI:
             with urllib.request.urlopen(request) as response:
                 return json.loads( response.read() )
         except HTTPError:
-            print(f'failed to retrieve tweet from user {username}')
+            logger.warning('Failed to retrieve tweet from user %s', username)
+            print(f'Failed to retrieve tweets from user {username}: the user may not exist anymore')
             return []
 
     def _create_request_object(self, username, maxId, mostRecentTweetId):
@@ -131,13 +139,15 @@ class TweetsRetriever_TwitterAPI:
         return queryString
 
     def createHeader(self, queryString):
+        current_settings = self._settings.get()
+
         return {
             'Authorization': createOAuth1HeaderString(
                 self.ENDPOINT_URL,
                 self.METHOD,
                 queryString,
                 {},
-                createAuthInfo(self._settings),
-                self._settings
+                createAuthInfo(current_settings),
+                current_settings
             ),
         }

@@ -31,17 +31,6 @@ def test_readUserList_ShouldBeEmptyListWhenFileNotExist():
     userList = readUserList(filePath)
     assert len(userList) == 0
 
-    filePath.unlink()
-    
-def test_readUserList_ShouldCreateUserListFileWhenFileNotExist():
-    filePath = TEST_FILES_LOCATION / 'NON_EXISTANT_FILE.txt'
-    assert not filePath.exists()
-
-    readUserList(filePath)
-    
-    assert filePath.exists()
-    filePath.unlink()
-
 def test_readUserList_ShouldTrimNewLine():
     filePath = TEST_FILES_LOCATION / 'manypatterns.txt'
 

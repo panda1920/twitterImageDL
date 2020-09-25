@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from configparser import ConfigParser
 from copy import deepcopy
@@ -5,6 +6,8 @@ from copy import deepcopy
 import twitter_image_dl.global_constants as constants
 import twitter_image_dl.exceptions as exceptions
 from twitter_image_dl.dltask_scheduler import DltaskScheduler
+
+logger = logging.getLogger(__name__)
 
 # helpers
 
@@ -65,6 +68,8 @@ class Settings:
     }
 
     def __init__(self, filepath):
+        logger.info('Initializing settings object')
+
         self._filepath = filepath
         self._parser = ConfigParser()
         self._settings = {}
@@ -72,8 +77,12 @@ class Settings:
         self._configureParser()
         self._readSettingsFromFile()
         self._normalizeSettings()
+
+        logger.info('Finished initializing settings object')
     
     def get(self):
+        logger.info('Reading from settings object')
+
         settings = deepcopy(self._settings)
         
         # convert to types meaningful to rest of the app
@@ -85,6 +94,8 @@ class Settings:
         return settings
 
     def set(self, settings):
+        logger.info('Updating settings object')
+
         copy = deepcopy(settings)
         for section, options in copy.items():
             self._settings[section].update(options)
@@ -95,28 +106,38 @@ class Settings:
                 self._settings[section][name] = convert(option)
         
     def write(self):
+        logger.info('Writing out content of setings object to file %s', str(self._filepath))
+
         self._parser.read_dict(self._settings)
         with self._filepath.open(mode='w', encoding='utf-8') as fp:
             self._parser.write(fp)
 
     def validate_settings(self):
+        logger.info('Validating current state of app settings')
+
         if (
             self._settings[constants.API_SECTION][constants.ACCESS_TOKEN] == '' or
             self._settings[constants.API_SECTION][constants.ACCESS_SECRET] == '' or
             self._settings[constants.API_SECTION][constants.CONSUMER_KEY] == '' or
             self._settings[constants.API_SECTION][constants.CONSUMER_SECRET] == ''
         ):
-            raise exceptions.APINotFound('Please make sure to fill out Twitter API related options in settings')
+            print('Make sure to fill out Twitter API related options in settings')
+            logger.warning('Twitter API key was not found in settings')
+            raise exceptions.APINotFound('Twitter API key was not found in settings')
         if (
             not Path(self._settings[constants.GENERAL_SECTION][constants.SAVE_LOCATION]).exists()
         ):
-            raise exceptions.SaveLocationNotExist('Please make sure to specify a valid save location in settings')
+            print('Make sure to specify a valid save location in settings')
+            logger.warning('Save location in settings doest not exist')
+            raise exceptions.SaveLocationNotExist('Save location in settings doest not exist')
 
     def _configureParser(self):
         # avoid automatic conversion of each option names to lower case
         self._parser.optionxform = lambda option: option
 
     def _readSettingsFromFile(self):
+        logging.info('Reading settings from file %s', str(self._filepath))
+
         self._parser.read(self._filepath)
         for section, options in self._parser.items():
             self._settings[section] = {
@@ -124,11 +145,18 @@ class Settings:
             }
 
     def _normalizeSettings(self):
+        logger.info('Normalizing current state of app settings')
+
         self._create_missing_sections()
         self._convert_invalid_values()
 
     def _create_missing_sections(self):
+        log_substitution = lambda section: (
+            logger.info('Substituting %s section with default value because it was missing', section)
+        )
+
         if constants.API_SECTION not in self._settings:
+            log_substitution(constants.API_SECTION)
             self._set_default_section(constants.API_SECTION, [
                 constants.ACCESS_TOKEN,
                 constants.ACCESS_SECRET,
@@ -137,11 +165,13 @@ class Settings:
             ])
         
         if constants.GENERAL_SECTION not in self._settings:
+            log_substitution(constants.GENERAL_SECTION)
             self._set_default_section(constants.GENERAL_SECTION,[
                 constants.SAVE_LOCATION
             ])
 
         if constants.SCHEDULE_SECTION not in self._settings:
+            log_substitution(constants.SCHEDULE_SECTION)
             self._set_default_section(constants.SCHEDULE_SECTION, [
                 constants.IS_SCHEDULED,
                 constants.SCHEDULE_PERIOD,
@@ -150,6 +180,8 @@ class Settings:
             ])
 
     def _convert_invalid_values(self):
+        logger.info('Converting invalid values in settings')
+
         self._convert_section_invalid_values(constants.GENERAL_SECTION, [
             constants.SAVE_LOCATION
         ])
