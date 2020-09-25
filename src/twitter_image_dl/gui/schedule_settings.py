@@ -26,6 +26,10 @@ class ScheduleSettings(ttk.Frame):
 
     def reload(self):
         self._load_values()
+        self._enable_widgets_basedon_toggle()
+
+    def set_onchange_callback(self, callback):
+        self._onchange = callback
 
     def _initializeWidgets(self):
         self._create_widgets()
@@ -51,9 +55,9 @@ class ScheduleSettings(ttk.Frame):
         self._start_time = ttk.Frame(self)
         self._start_time_label = ttk.Label(self._start_time, text='Start time')
         self._hours_label = ttk.Label(self._start_time, text='Hour')
-        self._hours = tk.Spinbox(self._start_time, from_=0, to=23)
+        self._hours = ttk.Spinbox(self._start_time, from_=0, to=23)
         self._minutes_label = ttk.Label(self._start_time, text='Minute')
-        self._minutes = tk.Spinbox(self._start_time, from_=0, to=59)
+        self._minutes = ttk.Spinbox(self._start_time, from_=0, to=59)
 
     def _set_widget_geometry(self):
         self.columnconfigure(0, minsize=18, weight=0)
@@ -86,6 +90,9 @@ class ScheduleSettings(ttk.Frame):
 
     def _bind_callbacks(self):
         self._toggle_schedule.configure(command=self._toggle_handler)
+        self._schedules_options.bind('<<ComboboxSelected>>', self._onchange_handler)
+        self._hours.configure(command=self._onchange_handler)
+        self._minutes.configure(command=self._onchange_handler)
 
     def _load_values(self):
         schedule_settings = self._bindings.get_settings().get()[constants.SCHEDULE_SECTION]
@@ -96,8 +103,6 @@ class ScheduleSettings(ttk.Frame):
         self._hours.insert(0, schedule_settings[constants.START_HOUR])
         self._minutes.delete(0, 'end')
         self._minutes.insert(0, schedule_settings[constants.START_MINUTE])
-
-        self._enable_widgets_basedon_toggle()
 
     def _enable_widgets_basedon_toggle(self):
         if self._schedule_toggled.get():
@@ -111,3 +116,8 @@ class ScheduleSettings(ttk.Frame):
 
     def _toggle_handler(self, *args):
         self._enable_widgets_basedon_toggle()
+        self._onchange_handler()
+
+    def _onchange_handler(self, *args):
+        if self._onchange:
+            self._onchange()

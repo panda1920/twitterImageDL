@@ -22,6 +22,7 @@ class SettingsPage(ttk.Frame):
         self._general_settings.reload()
         self._api_settings.reload()
         self._schedule_settings.reload()
+        self._disable_apply_change()
 
     def set_close_callback(self, callback):
         self._close_callback = callback
@@ -62,6 +63,9 @@ class SettingsPage(ttk.Frame):
         self._apply_change_button.configure(command=self._apply_change_handler)
         self._close_button.configure(command=self._close_handler)
         self._selections.set_selection_callback(self._display_setting_page)
+        self._general_settings.set_onchange_callback(self._enable_apply_change)
+        self._api_settings.set_onchange_callback(self._enable_apply_change)
+        self._schedule_settings.set_onchange_callback(self._enable_apply_change)
 
     def _apply_change_handler(self):
         self._general_settings.apply_change()
@@ -71,6 +75,7 @@ class SettingsPage(ttk.Frame):
         try:
             self._bindings.get_settings().write()
             print('Succesfully updated settings file')
+            self._disable_apply_change()
         except Exception as e:
             print('Failed to update settings file')
 
@@ -85,3 +90,9 @@ class SettingsPage(ttk.Frame):
             self._api_settings.lift()
         if selection == constants.SCHEDULE_SECTION:
             self._schedule_settings.lift()
+
+    def _disable_apply_change(self):
+        self._apply_change_button.configure(state='disabled')
+
+    def _enable_apply_change(self):
+        self._apply_change_button.configure(state='active')

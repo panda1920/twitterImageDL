@@ -25,11 +25,13 @@ class GeneralSettings(ttk.Frame):
 
     def reload(self):
         self._load_values()
+
+    def set_onchange_callback(self, callback):
+        self._onchange = callback
         
     def _initializeWidgets(self):
         self._create_widgets()
         self._set_widget_geometry()
-        # self._set_widget_styles()
         self._bind_callbacks()
         self._load_values()
 
@@ -59,9 +61,7 @@ class GeneralSettings(ttk.Frame):
 
     def _bind_callbacks(self):
         for input in self._inputs:
-            input.set_key_callback(lambda e: None
-                # fire some event to activate parent apply button
-            )
+            input.set_key_callback(self._onchange_handler)
         self._save_in_button.configure(command=self._save_in_handler)
 
     def _save_in_handler(self):
@@ -70,4 +70,8 @@ class GeneralSettings(ttk.Frame):
             return
         
         self._inputs[0].set_value(Path(new_save_location))
-        # fire some event to activate parent apply button
+        self._onchange_handler()
+
+    def _onchange_handler(self, *args):
+        if self._onchange:
+            self._onchange()
