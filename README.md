@@ -26,7 +26,8 @@ Download the app [here](https://twitter-image-dl.kamigama.dev).
 3. Execute build script build/build.bat
 
 Built files would be located dist/twitter_image_dl.  
-twitter_image_dl.exe is a standalone executable that does download tasks only.
+`twitter_image_dl.exe` would launch a gui.
+`dl.exe` is a standalone executable that does download tasks only.
 
 ## Usage
 #### Prerequisites
@@ -42,7 +43,7 @@ username02
 username03
 ```
 
-Execute `gui.exe`.  
+Execute `twitter_image_dl.exe`.  
 From the settings page, fill out your twitter API related info and your desired save location of media files.  
 Make sure you hit the apply change button.  
 Place `users.txt` file in the save location you specified earlier.  

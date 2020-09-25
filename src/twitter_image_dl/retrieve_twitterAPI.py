@@ -118,7 +118,7 @@ class TweetsRetriever_TwitterAPI:
             with urllib.request.urlopen(request) as response:
                 return json.loads( response.read() )
         except HTTPError:
-            logger.warning('Failed to retrieve tweet from user %', username)
+            logger.warning('Failed to retrieve tweet from user %s', username)
             print(f'Failed to retrieve tweets from user {username}: the user may not exist anymore')
             return []
 

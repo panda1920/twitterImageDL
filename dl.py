@@ -18,7 +18,7 @@ if os.getenv('IS_TEST', None) == 'True':
     shutil.copyfile(SETTINGS_DIR / 'settings.conf', TEST_WORK_DIR / 'settings.conf')
     work_dir = TEST_WORK_DIR
 else:
-    work_dir = Path(sys._MEIPASS).resolve().parents[0] / 'gui' # dir where gui exe is located at
+    work_dir = Path(sys._MEIPASS) # dir where exe is located at
 
 setup_logger(work_dir, logging.DEBUG)
 bindings = RuntimeBindings(work_dir)

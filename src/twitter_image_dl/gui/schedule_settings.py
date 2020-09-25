@@ -97,9 +97,9 @@ class ScheduleSettings(ttk.Frame):
         self._minutes.delete(0, 'end')
         self._minutes.insert(0, schedule_settings[constants.START_MINUTE])
 
-        self._toggle_handler()
+        self._enable_widgets_basedon_toggle()
 
-    def _toggle_handler(self, *args):
+    def _enable_widgets_basedon_toggle(self):
         if self._schedule_toggled.get():
             self._schedules_options.configure(state='enable')
             self._hours.configure(state='normal')
@@ -108,3 +108,6 @@ class ScheduleSettings(ttk.Frame):
             self._schedules_options.configure(state='disable')
             self._hours.configure(state='disable')
             self._minutes.configure(state='disable')
+
+    def _toggle_handler(self, *args):
+        self._enable_widgets_basedon_toggle()

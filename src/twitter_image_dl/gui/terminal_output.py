@@ -12,7 +12,7 @@ class TerminalOutput(ttk.Frame):
         super().__init__(master, **config)
         self._bindings = bindings
         self._initializeWidgets()
-        # sys.stdout = self
+        sys.stdout = self
 
     def _initializeWidgets(self):
         self._create_widgets()
