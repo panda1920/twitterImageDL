@@ -26,7 +26,7 @@ Download the app [here](https://twitter-image-dl.kamigama.dev).
 3. Execute build script build/build.bat
 
 Built files would be located dist/twitter_image_dl.  
-`twitter_image_dl.exe` would launch a gui.
+`twitter_image_dl.exe` would launch a gui.  
 `dl.exe` is a standalone executable that does download tasks only.
 
 ## Usage
@@ -65,6 +65,6 @@ Pulling files/folders out of its original location may cause the app to break.
 - [x] Set up CI/CD to automate test/build/distribution of app
 - [ ] Brush up GUI
 - [x] Better logging and message output
-- [ ] Integrate task scheduler functionality to the GUI
+- [x] Integrate task scheduler functionality to the GUI
 - [ ] Adapt to new twitter APIv2.0
 - [ ] Create executable for other systems (maybe)

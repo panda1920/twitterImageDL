@@ -25,6 +25,9 @@ class APISettings(ttk.Frame):
     def reload(self):
         self._load_values()
 
+    def set_onchange_callback(self, callback):
+        self._onchange = callback
+
     def _initializeWidgets(self):
         self._create_widgets()
         self._set_widget_geometry()
@@ -55,7 +58,8 @@ class APISettings(ttk.Frame):
 
     def _bind_callbacks(self):
         for input in self._inputs:
-            input.set_key_callback(lambda e: None
-                # self._apply_button.configure(state='active')
-                # something that disables apply button in parent
-            )
+            input.set_key_callback(self._onchange_handler)
+
+    def _onchange_handler(self, *args):
+        if self._onchange:
+            self._onchange()
